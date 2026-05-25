@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playground, Veronica Carli</title>
+<meta name="description" content="Un archivio più personale. Pesca una carta, entra in una versione di me.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-playground">
+
+<!-- NAV -->
+<nav class="nav-on-dark">
+  <a href="index.html" class="logo">Veronica Carli<span class="dot"></span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-it="Home" data-en="Home">Home</a></li>
+    <li><a href="work.html" data-it="Progetti" data-en="Work">Progetti</a></li>
+    <li><a href="about.html" data-it="About" data-en="About">About</a></li>
+    <li><a href="playground.html" class="current" data-it="Playground" data-en="Playground">Playground</a></li>
+    <li><a href="index.html#contact" data-it="Contatti" data-en="Contact">Contatti</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button class="active" data-lang="it">IT</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+  <button class="nav-toggle" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-nav">
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV PANEL -->
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" data-it="Home" data-en="Home">Home</a></li>
+    <li><a href="work.html" data-it="Progetti" data-en="Work">Progetti</a></li>
+      <li><a href="about.html" data-it="About" data-en="About">About</a></li>
+      <li><a href="playground.html" class="current" data-it="Playground" data-en="Playground">Playground</a></li>
+      <li><a href="index.html#contact" data-it="Contatti" data-en="Contact">Contatti</a></li>
+    </ul>
+    <div class="mobile-nav-footer"><div class="mobile-nav-meta">
+        <span>Veronica Carli</span>
+        <span data-it="Milano, IT" data-en="Milan, IT">Milano, IT</span>
+        <span data-it="Disponibile 2026" data-en="Available 2026">Disponibile 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYGROUND -->
+<section class="playground">
+
+  <header class="playground-header">
+    <div class="section-number" data-it="(00) Playground" data-en="(00) Playground">(00) Playground</div>
+    <h1 class="playground-title">
+      <span data-it-html="Un archivio più <span class='accent'>personale</span>, dove interessi, ricerca e immaginazione prendono forma."
+            data-en-html="A more <span class='accent'>personal</span> archive, where interests, research and imagination take shape.">
+        Un archivio più <span class="accent">personale</span>, dove interessi, ricerca e immaginazione prendono forma.
+      </span>
+    </h1>
+    <p class="playground-sub">
+      <span data-it="Pesca una carta, entra in una versione di me, scopri i progetti che le appartengono."
+            data-en="Draw a card, step into a version of me, discover the projects that belong to it.">
+        Pesca una carta, entra in una versione di me, scopri i progetti che le appartengono.
+      </span>
+    </p>
+  </header>
+
+  <!-- MAZZO DI CARTE -->
+  <div class="card-stage" id="cardStage">
+
+    <button class="card" data-card="quota"
+      style="--card-color: #4A7C59; --card-x: -360px; --card-y: 30px; --card-r: -12deg;">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <span class="card-num">I</span>
+          <span class="card-symbol">▲</span>
+          <h2 class="card-title">Veronica<br>in quota</h2>
+          <span class="card-tag">Outdoor</span>
+        </div>
+        <div class="card-face card-back">
+          <span class="card-back-num">I</span>
+          <h3>Veronica in quota</h3>
+          <p>Quando esco dalla città e seguo i sentieri. Trekking, paesaggio, lentezza, storie sopra i 2000 metri.</p>
+          <ul class="card-projects">
+            <li><a href="#" data-tag="Versione I, Veronica in quota" data-title="Vero&amp;Ele" data-desc="Un account Instagram da creator dove racconto sentieri di montagna, attività outdoor e vacanze in natura, un diario a quattro mani con Elena, mia compagna d'avventura." data-img="Immagini/playground/veroeele-cover.png" data-cta-url="https://www.instagram.com/vero_ele" data-cta-label="Vai su Instagram">Vero&amp;Ele · outdoor storytelling</a></li>
+            <li><a href="#" data-tag="Versione I, Veronica in quota" data-title="Diari di sentiero" data-desc="Progetto editoriale in arrivo. Cronache visive da percorsi sopra i 2000 metri, appunti, foto e mappe disegnate a mano.">Diari di sentiero (in arrivo)</a></li>
+          </ul>
+          <span class="card-symbol-bg">▲</span>
+        </div>
+      </div>
+    </button>
+
+    <button class="card" data-card="sperimentale"
+      style="--card-color: #8B5CF6; --card-x: -170px; --card-y: -50px; --card-r: -5deg;">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <span class="card-num">II</span>
+          <span class="card-symbol">✦</span>
+          <h2 class="card-title">Veronica<br>sperimentale</h2>
+          <span class="card-tag">AI · Lab</span>
+        </div>
+        <div class="card-face card-back">
+          <span class="card-back-num">II</span>
+          <h3>Veronica sperimentale</h3>
+          <p>Test, prototipi, esperimenti con AI. Quando la curiosità batte la deadline e il processo è il risultato.</p>
+          <ul class="card-projects">
+            <li><a href="#" data-tag="Versione II, Veronica sperimentale" data-title="AI Visuals" data-desc="Una raccolta di esperimenti con AI generativa: visual research, prototipi, ricerche di stile. Higgsfield, Midjourney, ComfyUI come strumenti di indagine, non di produzione.">AI Visuals · selected experiments</a></li>
+            <li><a href="#" data-tag="Versione II, Veronica sperimentale" data-title="Visual research lab" data-desc="Esperimenti continui di linguaggio visivo: collage, texture, manipolazioni fotografiche. Materiali grezzi che alimentano i progetti commerciali.">Visual research lab</a></li>
+          </ul>
+          <span class="card-symbol-bg">✦</span>
+        </div>
+      </div>
+    </button>
+
+    <button class="card" data-card="parole"
+      style="--card-color: #D4A574; --card-x: 0px; --card-y: -85px; --card-r: 2deg;">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <span class="card-num">III</span>
+          <span class="card-symbol">¶</span>
+          <h2 class="card-title">Veronica<br>in parole</h2>
+          <span class="card-tag">Writing</span>
+        </div>
+        <div class="card-face card-back">
+          <span class="card-back-num">III</span>
+          <h3>Veronica in parole</h3>
+          <p>Articoli, riflessioni, appunti. Quando il pensiero si fa testo prima dell'immagine, e si lascia raccontare per esteso.</p>
+          <ul class="card-projects">
+            <li><a href="#" data-tag="Versione III, Veronica in parole" data-title="Articoli su LinkedIn" data-desc="Riflessioni su brand, design, AI e processo creativo. Pubblicati periodicamente sul mio profilo LinkedIn." data-cta-url="#" data-cta-label="Vai al profilo LinkedIn">Articoli su LinkedIn</a></li>
+            <li><a href="#" data-tag="Versione III, Veronica in parole" data-title="Newsletter" data-desc="In arrivo. Una newsletter mensile su design, AI e art direction contemporanea, appunti dal mio tavolo di lavoro.">Newsletter (in arrivo)</a></li>
+          </ul>
+          <span class="card-symbol-bg">¶</span>
+        </div>
+      </div>
+    </button>
+
+    <button class="card" data-card="fuori-brief"
+      style="--card-color: #F87171; --card-x: 170px; --card-y: -50px; --card-r: 6deg;">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <span class="card-num">IV</span>
+          <span class="card-symbol">❋</span>
+          <h2 class="card-title">Veronica<br>fuori brief</h2>
+          <span class="card-tag">Free</span>
+        </div>
+        <div class="card-face card-back">
+          <span class="card-back-num">IV</span>
+          <h3>Veronica fuori brief</h3>
+          <p>Concept liberi, poster, identità immaginarie. Quello che faccio quando nessuno me lo chiede, solo per il piacere di farlo.</p>
+          <ul class="card-projects">
+            <li><a href="#" data-tag="Versione IV, Veronica fuori brief" data-title="Poster collection" data-desc="Una serie di poster fatti per il puro gusto. Sperimentazioni libere su forma, colore e linguaggio, senza cliente, senza deadline.">Poster collection</a></li>
+            <li><a href="#" data-tag="Versione IV, Veronica fuori brief" data-title="Identità immaginarie" data-desc="Brand inventati. Logo, palette e storytelling per cose che non esistono, ancora. Esercizi di immaginazione e di sistema.">Identità immaginarie</a></li>
+          </ul>
+          <span class="card-symbol-bg">❋</span>
+        </div>
+      </div>
+    </button>
+
+    <button class="card" data-card="sistema"
+      style="--card-color: #06B6D4; --card-x: 360px; --card-y: 30px; --card-r: 12deg;">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <span class="card-num">V</span>
+          <span class="card-symbol">◇</span>
+          <h2 class="card-title">Veronica<br>tra immagine<br>e sistema</h2>
+          <span class="card-tag">Vibe Coding</span>
+        </div>
+        <div class="card-face card-back">
+          <span class="card-back-num">V</span>
+          <h3>Veronica tra immagine e sistema</h3>
+          <p>Esperimenti tra design e codice. UX, layout thinking, portfolio come prototipo, l'oggetto che racconta sé stesso.</p>
+          <ul class="card-projects">
+            <li><a href="#" data-tag="Versione V, Veronica tra immagine e sistema" data-title="Questo portfolio" data-desc="Il sito che stai guardando. Costruito in vibe coding con AI come copilota, esperimento di design e codice insieme, sistema visivo che si racconta camminandoci dentro." data-cta-url="index.html" data-cta-label="Vai alla home">Questo portfolio (vibe coding)</a></li>
+            <li><a href="#" data-tag="Versione V, Veronica tra immagine e sistema" data-title="UX &amp; layout experiments" data-desc="Prototipi di interaction e layout. Esperimenti di tipografia, griglie e sistemi adattivi, il design come comportamento, non solo come forma.">UX &amp; layout experiments</a></li>
+          </ul>
+          <span class="card-symbol-bg">◇</span>
+        </div>
+      </div>
+    </button>
+
+  </div>
+
+  <!-- HINT -->
+  <div class="playground-hint">
+    <span data-it="↳ Click su una carta per girarla. Click di nuovo o su un'altra per chiudere." data-en="↳ Click a card to flip. Click again or another card to close.">
+      ↳ Click su una carta per girarla. Click di nuovo o su un'altra per chiudere.
+    </span>
+  </div>
+
+  <!-- RESHUFFLE -->
+  <button class="reshuffle-btn" id="reshuffleBtn" type="button">
+    <span data-it="Mescola di nuovo" data-en="Shuffle again">Mescola di nuovo</span>
+    <span class="arrow">↻</span>
+  </button>
+
+</section>
+
+<!-- PROJECT POPUP -->
+<div class="project-popup" id="projectPopup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup-backdrop" id="popupBackdrop"></div>
+
+  <article class="popup-window">
+    <button class="popup-close" id="popupClose" type="button" aria-label="Chiudi">
+      <span></span><span></span>
+    </button>
+
+    <!-- HERO IMAGE + TAG + TITOLO -->
+    <header class="popup-hero" data-hero>
+      <img class="popup-hero-img" data-img-el alt="">
+      <div class="popup-hero-overlay"></div>
+      <div class="popup-hero-content">
+        <span class="popup-tag" data-tag>Versione</span>
+        <h2 class="popup-title" data-title>Titolo</h2>
+      </div>
+    </header>
+
+    <!-- BODY: descrizione, gallery, cta -->
+    <div class="popup-body">
+      <p class="popup-desc" data-desc>Descrizione</p>
+
+      <div class="popup-gallery" data-gallery-wrap>
+        <span class="popup-gallery-label" data-it="↳ Anteprima" data-en="↳ Preview">↳ Anteprima</span>
+        <div class="popup-gallery-grid" data-gallery-grid></div>
+      </div>
+
+      <div class="popup-cta-wrap" data-cta-wrap>
+        <a class="popup-cta" data-cta href="#" target="_blank" rel="noopener">
+          <span data-cta-label>Vai al progetto</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </article>
+</div>
+
+<!-- FOOTER CTA -->
+<section id="contact" class="footer-cta">
+  <h2>
+    <span data-it-html="Lavoriamo <span class='accent'>insieme</span>."
+          data-en-html="Let's <span class='accent'>work</span><br>together.">
+      Lavoriamo <span class="accent">insieme</span>.
+    </span>
+  </h2>
+  <a href="mailto:hello@veronicacarli.com" class="email">hello@veronicacarli.com</a>
+</section>
+
+<footer>
+  <span>© 2026 Veronica Carli</span>
+  <div class="socials">
+    <a href="#">LinkedIn ↗</a>
+    <a href="#">Instagram ↗</a>
+    <a href="#">Behance ↗</a>
+  </div>
+  <span data-it="Fatto a Milano" data-en="Made in Milan">Fatto a Milano</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
