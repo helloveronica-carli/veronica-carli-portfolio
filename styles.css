@@ -13,6 +13,7 @@
   --muted: #6B6A65;
   --accent: #FF5A1F;
   --accent-deep: #E64A14;
+  --electric: #2E5BFF;
   --line: rgba(10, 10, 10, 0.12);
 }
 
@@ -2877,4 +2878,30 @@ body.popup-open { overflow: hidden; }
   .capability--featured { padding: 36px 28px; }
   .capability h3 { font-size: 26px; }
   .capability--featured h3 { font-size: 34px; }
+}
+
+/* ====================================
+   ELECTRIC BLUE — tocchi puntuali (home)
+   ==================================== */
+/* ↳ Portfolio / 2026 */
+.hero-meta > span:first-child { color: var(--electric); }
+
+/* Disponibile (badge nel nav) */
+.status { color: var(--electric); }
+.status .dot {
+  background: var(--electric);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--electric);
+}
+
+/* Scrivimi (hero CTA) */
+.hero-cta a { color: var(--electric); }
+
+/* (01) Progetti selezionati — solo lista home, non moodboard */
+.work-list-section .section-number { color: var(--electric); }
+
+/* (02) Chi sono + Leggi la bio completa */
+.about-label { color: var(--electric); }
+.about-link {
+  color: var(--electric);
+  border-bottom-color: var(--electric);
 }
