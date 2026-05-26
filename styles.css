@@ -1199,6 +1199,26 @@ footer a:hover { color: var(--accent); }
   object-fit: cover;
 }
 
+/* Video verticali / portrait: limita altezza al viewport, centra,
+   no fasce di sfondo grigio attorno */
+.asset-media-full .asset-tile:has(video),
+.asset-media-portrait .asset-tile:has(video) {
+  background: transparent;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.asset-media-full .asset-tile video,
+.asset-media-portrait .asset-tile video {
+  max-height: 85vh;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
 /* ====================================
    CASE STUDY — GALLERY
    ==================================== */
