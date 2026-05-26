@@ -1188,6 +1188,9 @@ footer a:hover { color: var(--accent); }
 }
 
 /* Embed Instagram (reel/post) — altezza fissa per ospitare la chrome */
+.asset-media-portrait:has(.asset-tile--instagram) {
+  max-width: 540px;
+}
 .asset-tile--instagram {
   background: transparent;
   border-radius: 0;
@@ -1195,7 +1198,7 @@ footer a:hover { color: var(--accent); }
 }
 .asset-tile--instagram iframe {
   width: 100%;
-  min-height: 720px;
+  min-height: 900px;
   border: 0;
   display: block;
   background: #fff;
