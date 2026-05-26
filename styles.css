@@ -2903,3 +2903,14 @@ body.popup-open { overflow: hidden; }
 .case-section .label [data-it="Il mio ruolo"] {
   color: var(--electric);
 }
+
+/* ABOUT */
+/* ↳ About / Chi sono — eyebrow sul photo hero */
+.about-eyebrow { color: var(--electric); }
+
+/* Art Director & Communication Designer, Milano, IT */
+.about-role { color: var(--electric); }
+
+/* Rettangolo AI Creative Communication (featured capability) */
+.capability--featured { background: var(--electric); }
+.capability--featured .cap-num { color: var(--bg); }
