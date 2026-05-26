@@ -2883,24 +2883,16 @@ body.popup-open { overflow: hidden; }
 /* ====================================
    ELECTRIC BLUE — tocchi puntuali (home)
    ==================================== */
-/* ↳ Portfolio / 2026 */
+/* Utility: colora solo il pezzo desiderato */
+.blu { color: var(--electric); }
+
+/* ↳ Portfolio / 2026 — primo span del meta */
 .hero-meta > span:first-child { color: var(--electric); }
 
-/* Disponibile (badge nel nav) */
-.status { color: var(--electric); }
-.status .dot {
-  background: var(--electric);
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--electric);
-}
-
-/* Scrivimi (hero CTA) */
+/* Scrivimi → (hero CTA) */
 .hero-cta a { color: var(--electric); }
 
-/* (01) Progetti selezionati — solo lista home, non moodboard */
-.work-list-section .section-number { color: var(--electric); }
-
-/* (02) Chi sono + Leggi la bio completa */
-.about-label { color: var(--electric); }
+/* Leggi la bio completa → (link con underline blu) */
 .about-link {
   color: var(--electric);
   border-bottom-color: var(--electric);
