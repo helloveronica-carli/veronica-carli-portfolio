@@ -83,12 +83,39 @@
       hero.classList.remove('has-image');
     }
 
-    // Gallery: se data-gallery presente popola con immagini, altrimenti 3 placeholder
+    // Gallery: priorità a IG embeds → poi immagini → poi placeholder
     galleryGrid.innerHTML = '';
+    galleryGrid.classList.remove('is-ig-embeds');
+
+    const igPosts = (link.dataset.igPosts || '')
+      .split(',').map(s => s.trim()).filter(Boolean);
     const galleryUrls = (link.dataset.gallery || '')
       .split(',').map(s => s.trim()).filter(Boolean);
 
-    if (galleryUrls.length > 0) {
+    if (igPosts.length > 0) {
+      galleryGrid.classList.add('is-ig-embeds');
+      igPosts.forEach(url => {
+        const tile = document.createElement('div');
+        tile.className = 'popup-gallery-tile';
+        const bq = document.createElement('blockquote');
+        bq.className = 'instagram-media';
+        bq.setAttribute('data-instgrm-permalink', url);
+        bq.setAttribute('data-instgrm-version', '14');
+        bq.style.cssText = 'background:#FFF;border:0;border-radius:6px;margin:0;max-width:100%;min-width:260px;padding:0;width:100%;';
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = 'Apri su Instagram';
+        bq.appendChild(a);
+        tile.appendChild(bq);
+        galleryGrid.appendChild(tile);
+      });
+      // Forza il re-processing degli embed Instagram appena inseriti
+      if (window.instgrm && window.instgrm.Embeds) {
+        window.instgrm.Embeds.process();
+      }
+    } else if (galleryUrls.length > 0) {
       galleryUrls.forEach(url => {
         const tile = document.createElement('div');
         tile.className = 'popup-gallery-tile';

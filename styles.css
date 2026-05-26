@@ -2729,6 +2729,27 @@ footer a:hover { color: var(--accent); }
   font-weight: 300;
 }
 
+/* Gallery con embed Instagram: niente aspect-ratio forzato, altezza dinamica */
+.popup-gallery-grid.is-ig-embeds {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.popup-gallery-grid.is-ig-embeds .popup-gallery-tile {
+  aspect-ratio: auto;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+  min-height: 540px;
+}
+.popup-gallery-grid.is-ig-embeds .instagram-media,
+.popup-gallery-grid.is-ig-embeds iframe {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  border-radius: 6px;
+}
+
 /* CTA */
 .popup-cta-wrap {
   border-top: 1px solid var(--line);
@@ -2903,6 +2924,10 @@ body.popup-open { overflow: hidden; }
   .popup-body { padding: 24px 22px 32px; }
   .popup-desc { font-size: 15px; }
   .popup-gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .popup-gallery-grid.is-ig-embeds {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 
   /* ABOUT */
   .about-stage { padding: 100px 20px; }
