@@ -328,9 +328,13 @@ body.nav-open { overflow: hidden; }
 }
 
 .hero-title .outline {
-  -webkit-text-stroke: 1.5px var(--fg);
-  color: transparent;
-  font-weight: 700;
+  background: var(--electric);
+  color: var(--bg);
+  padding: 0 0.15em 0.05em;
+  display: inline-block;
+  line-height: 0.9;
+  margin: 0 -0.05em;
+  font-weight: 500;
 }
 
 /* "in" su mobile sta sulla riga di "per brand", su desktop sulla riga di "movimento" */
