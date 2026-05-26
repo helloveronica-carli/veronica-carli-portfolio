@@ -2,6 +2,10 @@
 .afpDeleted*
 .AppleDouble
 ._*
+
+# File sorgente pesanti (master prima della compressione)
+Immagini/Progetti/Edison/Video header_xsito.mov
+Immagini/Progetti/Edison/Sequenza 01_2.mp4
 .vscode/
 node_modules/
 .env
