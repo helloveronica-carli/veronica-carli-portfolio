@@ -1657,30 +1657,24 @@ footer a:hover { color: var(--accent); }
 .see-all-btn {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 22px 14px 24px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--fg);
+  gap: 8px;
+  color: var(--electric);
   text-decoration: none;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  transition: background 0.3s ease, transform 0.3s ease;
+  letter-spacing: 0.08em;
+  transition: gap 0.3s ease;
 }
 
-.see-all-btn:hover {
-  background: var(--accent-deep);
-  transform: translateX(4px);
-}
+.see-all-btn:hover { gap: 14px; }
 
 .see-all-btn .arrow {
   display: inline-block;
   transition: transform 0.3s ease;
 }
 
-.see-all-btn:hover .arrow { transform: translateX(6px); }
+.see-all-btn:hover .arrow { transform: translateX(4px); }
 
 /* ====================================
    WORK MOODBOARD (page /work.html) — griglia mista a copertine
