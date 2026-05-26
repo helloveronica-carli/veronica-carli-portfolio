@@ -2875,19 +2875,31 @@ body.popup-open { overflow: hidden; }
 }
 
 /* ====================================
-   ELECTRIC BLUE — tocchi puntuali (home)
+   ELECTRIC BLUE — tocchi puntuali
    ==================================== */
 /* Utility: colora solo il pezzo desiderato */
 .blu { color: var(--electric); }
 
-/* ↳ Portfolio / 2026 — primo span del meta */
+/* HOME */
 .hero-meta > span:first-child { color: var(--electric); }
-
-/* Scrivimi → (hero CTA) */
 .hero-cta a { color: var(--electric); }
-
-/* Leggi la bio completa → (link con underline blu) */
 .about-link {
   color: var(--electric);
   border-bottom-color: var(--electric);
+}
+
+/* CASE STUDY pages */
+/* ← Progetti breadcrumb */
+.breadcrumb a { color: var(--electric); }
+.breadcrumb a:hover { color: var(--fg); }
+
+/* Tags nei project-header */
+.project-header .tag {
+  color: var(--electric);
+  border-color: var(--electric);
+}
+
+/* Titolo "Il mio ruolo" — match via attributo data-it */
+.case-section .label [data-it="Il mio ruolo"] {
+  color: var(--electric);
 }
