@@ -1659,16 +1659,19 @@ footer a:hover { color: var(--accent); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--electric);
+  color: var(--bg);
   text-decoration: none;
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  transition: gap 0.3s ease;
+  transition: gap 0.3s ease, color 0.3s ease;
 }
 
-.see-all-btn:hover { gap: 14px; }
+.see-all-btn:hover {
+  gap: 14px;
+  color: var(--accent);
+}
 
 .see-all-btn .arrow {
   display: inline-block;
