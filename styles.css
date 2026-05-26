@@ -1217,6 +1217,51 @@ footer a:hover { color: var(--accent); }
   border-radius: 6px;
 }
 
+/* Bottone audio overlay sui video */
+.video-sound-btn {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 3;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background .18s ease, transform .18s ease, opacity .18s ease;
+  opacity: 0;
+}
+.asset-tile:hover .video-sound-btn,
+.video-sound-btn.is-on,
+.video-sound-btn:focus-visible {
+  opacity: 1;
+}
+.video-sound-btn:hover {
+  background: rgba(10, 10, 10, 0.92);
+  transform: scale(1.06);
+}
+.video-sound-btn.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.video-sound-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+/* Su mobile/touch il bottone resta sempre visibile (no hover) */
+@media (hover: none) {
+  .video-sound-btn { opacity: 1; }
+}
+
 /* ====================================
    CASE STUDY — GALLERY
    ==================================== */

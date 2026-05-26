@@ -407,3 +407,54 @@
     });
   });
 })();
+
+// ====================================
+//  CASE STUDY — bottone audio sui video
+// ====================================
+(function () {
+  const ICON_MUTED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+  const ICON_SOUND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+
+  document.querySelectorAll('.asset-tile video').forEach(video => {
+    const tile = video.closest('.asset-tile');
+    if (!tile || tile.querySelector('.video-sound-btn')) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'video-sound-btn';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Attiva audio');
+    btn.innerHTML = ICON_MUTED;
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Se sto attivando l'audio, silenzia gli altri video aperti
+      if (video.muted) {
+        document.querySelectorAll('.asset-tile video').forEach(v => {
+          if (v !== video && !v.muted) {
+            v.muted = true;
+            const otherBtn = v.closest('.asset-tile')?.querySelector('.video-sound-btn');
+            if (otherBtn) {
+              otherBtn.innerHTML = ICON_MUTED;
+              otherBtn.classList.remove('is-on');
+              otherBtn.setAttribute('aria-label', 'Attiva audio');
+            }
+          }
+        });
+      }
+
+      video.muted = !video.muted;
+      btn.classList.toggle('is-on', !video.muted);
+      btn.innerHTML = video.muted ? ICON_MUTED : ICON_SOUND;
+      btn.setAttribute('aria-label', video.muted ? 'Attiva audio' : 'Disattiva audio');
+
+      // Force play se l'autoplay si era inceppato
+      if (!video.muted && video.paused) {
+        video.play().catch(() => {});
+      }
+    });
+
+    tile.appendChild(btn);
+  });
+})();
