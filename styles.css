@@ -2905,9 +2905,6 @@ body.popup-open { overflow: hidden; }
 }
 
 /* ABOUT */
-/* ↳ About / Chi sono — eyebrow sul photo hero */
-.about-eyebrow { color: var(--electric); }
-
 /* Art Director & Communication Designer, Milano, IT */
 .about-role { color: var(--electric); }
 
