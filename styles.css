@@ -1187,6 +1187,21 @@ footer a:hover { color: var(--accent); }
   display: block;
 }
 
+/* Embed Instagram (reel/post) — altezza fissa per ospitare la chrome */
+.asset-tile--instagram {
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+.asset-tile--instagram iframe {
+  width: 100%;
+  min-height: 720px;
+  border: 0;
+  display: block;
+  background: #fff;
+  border-radius: 6px;
+}
+
 /* Tile uniformi (es. set di loghi con aspect ratio diversi) */
 .asset-media--equal .asset-tile {
   aspect-ratio: 1 / 1;
