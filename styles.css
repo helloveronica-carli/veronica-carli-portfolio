@@ -1101,6 +1101,10 @@ footer a:hover { color: var(--accent); }
   font-size: clamp(26px, 2.6vw, 36px);
 }
 
+/* Variante a colonna singola: per intro senza "Il mio ruolo" */
+.case-section-pair--single { grid-template-columns: 1fr; }
+.case-section-pair--single > .case-section { padding: 60px 40px; }
+
 /* ====================================
    CASE STUDY — ASSET BLOCKS (sezioni dedicate per sotto-asset)
    ==================================== */
