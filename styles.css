@@ -2902,18 +2902,27 @@ body.popup-open { overflow: hidden; }
   .credits-grid { grid-template-columns: 1fr; gap: 20px; }
   .next-project { padding: 60px 20px; grid-template-columns: 1fr; gap: 32px; }
 
-  /* PLAYGROUND — su mobile carte in colonna, scatter più contenuto */
+  /* PLAYGROUND — su mobile: carousel scroll-snap, una carta alla volta al centro */
   .playground { padding: 100px 20px 40px; }
-  .card-stage { height: auto; padding: 40px 0; perspective: 1000px; }
+  html:has(body.page-playground) {
+    scroll-snap-type: y mandatory;
+  }
+  .card-stage {
+    height: auto;
+    padding: 25vh 0;
+    perspective: 1000px;
+  }
   .card {
     position: relative;
     top: auto;
     left: auto;
-    margin: 14px auto;
+    margin: 8vh auto;
     width: 290px;
     height: 440px;
     transform: rotate(0) !important;
     animation: deal-out-mobile 0.5s ease-out forwards;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
   }
   @keyframes deal-out-mobile {
     0%   { opacity: 0; transform: translateY(20px) rotate(0); }
