@@ -2914,6 +2914,7 @@ body.popup-open { overflow: hidden; }
     perspective: 1000px;
   }
   .card {
+    display: block;
     position: relative;
     top: auto;
     left: auto;
