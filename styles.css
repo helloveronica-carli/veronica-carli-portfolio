@@ -2518,6 +2518,23 @@ footer a:hover { color: var(--accent); }
   padding-left: 6px;
 }
 
+/* Variante 1 link centrato (no top border, allineato in basso) */
+.card-projects--single {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: auto;
+}
+.card-projects--single li { border-top: none; width: 100%; }
+.card-projects--single a {
+  padding: 16px 0;
+  border-top: 1px solid rgba(239, 238, 233, 0.18);
+  border-bottom: 1px solid rgba(239, 238, 233, 0.18);
+  text-align: center;
+}
+.card-projects--single a:hover { padding-left: 0; color: var(--card-color); }
+
 .card-symbol-bg {
   position: absolute;
   right: 12px;
