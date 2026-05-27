@@ -2503,6 +2503,11 @@ footer a:hover { color: var(--accent); }
   color: rgba(239, 238, 233, 0.4);
   margin-top: 60px;
 }
+.playground-hint .hint-mobile { display: none; }
+@media (max-width: 768px) {
+  .playground-hint .hint-desktop { display: none; }
+  .playground-hint .hint-mobile  { display: inline; }
+}
 
 .reshuffle-btn {
   display: block;
