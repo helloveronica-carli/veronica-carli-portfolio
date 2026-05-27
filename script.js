@@ -38,10 +38,10 @@
 
   // Swipe handler — applicato a tutte le carte ma agisce solo sulla top
   cardsArr.forEach(card => {
-    let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false;
+    let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false, isFlying = false;
 
     card.addEventListener('pointerdown', (e) => {
-      if (!isMobile() || card.dataset.stack !== '0') return;
+      if (!isMobile() || card.dataset.stack !== '0' || isFlying) return;
       // Non attivare drag se l'utente preme su un link
       if (e.target.closest('a')) return;
       startX = e.clientX;
@@ -56,34 +56,60 @@
       if (!dragging) return;
       dx = e.clientX - startX;
       dy = e.clientY - startY;
-      const rot = dx / 18;
-      card.style.transform = `translate(calc(-50% + ${dx}px), -50%) rotate(${rot}deg)`;
+      // Solo drag laterale: rotazione progressiva proporzionale a dx
+      const rot = dx / 16;
+      card.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy * 0.3}px)) rotate(${rot}deg)`;
     });
 
     card.addEventListener('pointerup', (e) => {
       if (!dragging) return;
       dragging = false;
       card.classList.remove('is-dragging');
-      card.style.transform = '';
       try { card.releasePointerCapture(e.pointerId); } catch(_) {}
 
       const dist = Math.abs(dx);
-      if (dist > SWIPE_THRESHOLD) {
-        // Swipe out completo, poi ricicla in fondo
+      const isHorizontal = Math.abs(dx) > Math.abs(dy);
+
+      if (dist > SWIPE_THRESHOLD && isHorizontal) {
+        // Carosello: fly out, teleport sull'altro lato, rientra in fondo al mazzo
         suppressNextClick = true;
+        isFlying = true;
+        card.classList.remove('flipped');
+        card.classList.add('is-flying-out');
+
         const direction = dx > 0 ? 1 : -1;
         const w = window.innerWidth;
-        card.classList.add('is-swiping-out');
-        card.style.transform = `translate(calc(-50% + ${direction * (w + 100)}px), -50%) rotate(${direction * 30}deg)`;
-        card.classList.remove('flipped');
+        const exitX = direction * (w + 200);
+        const enterX = -direction * (w + 200);
+        const exitRot = direction * 28;
+        const enterRot = -direction * 12;
+
+        // Step 1: animazione di uscita verso il lato del drag
+        card.style.transform = `translate(calc(-50% + ${exitX}px), -50%) rotate(${exitRot}deg)`;
+
         setTimeout(() => {
+          // Step 2: teleport instantaneo sull'altro lato (fuori vista)
+          card.style.transition = 'none';
+          card.style.transform = `translate(calc(-50% + ${enterX}px), -50%) rotate(${enterRot}deg)`;
+          // Step 3: aggiorna ordine stack (la carta volata diventa l'ultima)
           recycleTop();
-          card.classList.remove('is-swiping-out');
-          card.style.transform = '';
-        }, 500);
+          // Forza reflow per applicare il teleport prima di riabilitare la transizione
+          void card.offsetWidth;
+          // Step 4: prossimo frame, rimuovi tutto: CSS data-stack=4 prende il controllo
+          requestAnimationFrame(() => {
+            card.style.transition = '';
+            card.style.transform = '';
+            card.classList.remove('is-flying-out');
+            isFlying = false;
+          });
+        }, 450);
       } else if (dist > 5) {
-        // Drag piccolo, snap back e blocca il click che segue
+        // Drag corto / verticale → snap back + blocca click
         suppressNextClick = true;
+        card.style.transform = '';
+      } else {
+        // Movimento minimo → resta tap, lascia il click handler in pace
+        card.style.transform = '';
       }
     });
 
