@@ -2910,14 +2910,14 @@ body.popup-open { overflow: hidden; }
   }
   .card-stage {
     height: auto;
-    padding: 25vh 0;
+    padding: calc(50vh - 220px) 0;
     perspective: 1000px;
   }
   .card {
     position: relative;
     top: auto;
     left: auto;
-    margin: 8vh auto;
+    margin: 60px auto;
     width: 290px;
     height: 440px;
     transform: rotate(0) !important;
@@ -2925,6 +2925,8 @@ body.popup-open { overflow: hidden; }
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
+  .card:first-child { margin-top: 0; }
+  .card:last-child { margin-bottom: 0; }
   @keyframes deal-out-mobile {
     0%   { opacity: 0; transform: translateY(20px) rotate(0); }
     100% { opacity: 1; transform: translateY(0)    rotate(0); }
