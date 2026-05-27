@@ -2923,7 +2923,19 @@ body.popup-open { overflow: hidden; }
                 opacity 0.35s ease,
                 z-index 0s 0.45s;
     will-change: transform;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
   }
+  /* Solo la top card cattura il drag: le altre sotto non rubano gli eventi */
+  .card[data-stack="1"],
+  .card[data-stack="2"],
+  .card[data-stack="3"],
+  .card[data-stack="4"] {
+    pointer-events: none;
+  }
+  .card[data-stack="0"] { pointer-events: auto; }
   /* Stack visivo: top in primo piano, le altre dietro leggermente scalate.
      NIENTE !important qui — JS deve poter sovrascrivere via inline style. */
   .card[data-stack="0"] { z-index: 50; transform: translate(-50%, -50%); }
