@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progetti Plus, Veronica Carli</title>
+<meta name="description" content="Area riservata, lavori sotto NDA. Accesso con password.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-plus">
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">Veronica Carli<span class="dot"></span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-it="Home" data-en="Home">Home</a></li>
+    <li><a href="work.html" class="current" data-it="Progetti" data-en="Work">Progetti</a></li>
+    <li><a href="about.html" data-it="About" data-en="About">About</a></li>
+    <li><a href="playground.html" data-it="Playground" data-en="Playground">Playground</a></li>
+    <li><a href="index.html#contact" data-it="Contatti" data-en="Contact">Contatti</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button class="active" data-lang="it">IT</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+  <button class="nav-toggle" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-nav">
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV PANEL -->
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" data-it="Home" data-en="Home">Home</a></li>
+      <li><a href="work.html" class="current" data-it="Progetti" data-en="Work">Progetti</a></li>
+      <li><a href="about.html" data-it="About" data-en="About">About</a></li>
+      <li><a href="playground.html" data-it="Playground" data-en="Playground">Playground</a></li>
+      <li><a href="index.html#contact" data-it="Contatti" data-en="Contact">Contatti</a></li>
+    </ul>
+    <div class="mobile-nav-footer">
+      <div class="mobile-nav-meta">
+        <span>Veronica Carli</span>
+        <span data-it="Milano, IT" data-en="Milan, IT">Milano, IT</span>
+        <span data-it="Disponibile 2026" data-en="Available 2026">Disponibile 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD GATE -->
+<section class="plus-gate" id="plusGate">
+  <div class="plus-gate-inner">
+    <span class="plus-gate-label" data-it="↳ Area riservata" data-en="↳ Restricted area">↳ Area riservata</span>
+    <h1 class="plus-gate-title">
+      Progetti<br><span class="accent">Plus.</span>
+    </h1>
+    <p class="plus-gate-desc" data-it="Lavori in corso o sotto NDA. Inserisci la password per accedere." data-en="Work in progress or under NDA. Enter the password to access.">
+      Lavori in corso o sotto NDA. Inserisci la password per accedere.
+    </p>
+    <form class="plus-gate-form" id="plusForm" autocomplete="off">
+      <input type="password" id="plusInput" placeholder="Password" autocomplete="off" required>
+      <button type="submit" data-it="Sblocca" data-en="Unlock">Sblocca</button>
+    </form>
+    <p class="plus-gate-error" id="plusError" hidden data-it="Password errata, riprova." data-en="Wrong password, try again.">Password errata, riprova.</p>
+    <a href="work.html" class="plus-gate-back" data-it="← Torna ai progetti pubblici" data-en="← Back to public projects">← Torna ai progetti pubblici</a>
+  </div>
+</section>
+
+<!-- PROTECTED CONTENT -->
+<main class="plus-content" id="plusContent" hidden>
+
+  <section id="plus-work" class="work-moodboard-section">
+    <div class="section-header">
+      <div class="section-number" data-it-html="<span class='blu'>(+)</span> Progetti Plus" data-en-html="<span class='blu'>(+)</span> Plus Projects"><span class="blu">(+)</span> Progetti Plus</div>
+      <h2 class="section-title">
+        <span data-it-html="Lavori <span class='accent'>in corso</span>,<br>su richiesta." data-en-html="Work <span class='accent'>in progress</span>,<br>on request.">
+          Lavori <span class="accent">in corso</span>,<br>su richiesta.
+        </span>
+      </h2>
+    </div>
+
+    <div class="work-moodboard">
+
+      <!-- BNL placeholder -->
+      <a href="#" class="mb-item mb-item-hero cover-grad cover-grad-bnl" data-project="bnl">
+        <div class="mb-meta mb-meta--always">
+          <span class="mb-num">+01, 2025</span>
+          <h3>BNL</h3>
+          <div class="mb-tags">
+            <span class="tag">UX/UI</span>
+            <span class="tag">Banking</span>
+            <span class="tag">Sito web</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <p class="plus-note" data-it="↳ I contenuti di questa sezione sono confidenziali. Non condividere screenshot o link al di fuori del contesto autorizzato." data-en="↳ Content in this section is confidential. Do not share screenshots or links outside the authorized context.">
+      ↳ I contenuti di questa sezione sono confidenziali. Non condividere screenshot o link al di fuori del contesto autorizzato.
+    </p>
+  </section>
+
+  <!-- LOGOUT -->
+  <div class="plus-logout-wrap">
+    <button id="plusLogout" class="plus-logout" type="button" data-it="↳ Esci dall'area riservata" data-en="↳ Exit restricted area">↳ Esci dall'area riservata</button>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Veronica Carli</span>
+  <div class="socials">
+    <a href="#">LinkedIn ↗</a>
+    <a href="#">Instagram ↗</a>
+    <a href="#">Behance ↗</a>
+  </div>
+  <span data-it="Fatto a Milano" data-en="Made in Milan">Fatto a Milano</span>
+</footer>
+
+<script src="script.js"></script>
+<script>
+(function () {
+  // Soglia di sicurezza minima: hash della password invece di plain string nel JS.
+  // SHA-256 della password ("Commvero26"). Per cambiarla:
+  // echo -n "NuovaPwd" | shasum -a 256
+  const PWD_HASH = 'b075b8f6c43695fbb4d49b5b0cd6f3429f65adccaf154c1034486a06bb3afaab';
+  const SESSION_KEY = 'plus-auth';
+
+  const gate = document.getElementById('plusGate');
+  const content = document.getElementById('plusContent');
+  const form = document.getElementById('plusForm');
+  const input = document.getElementById('plusInput');
+  const errorEl = document.getElementById('plusError');
+  const logoutBtn = document.getElementById('plusLogout');
+
+  async function sha256(str) {
+    const buf = new TextEncoder().encode(str);
+    const hashBuf = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function unlock() {
+    gate.style.display = 'none';
+    content.hidden = false;
+    document.body.classList.add('is-plus-unlocked');
+  }
+  function lock() {
+    sessionStorage.removeItem(SESSION_KEY);
+    gate.style.display = '';
+    content.hidden = true;
+    document.body.classList.remove('is-plus-unlocked');
+    input.value = '';
+  }
+
+  // Auto-unlock se già autorizzato in questa sessione
+  if (sessionStorage.getItem(SESSION_KEY) === '1') unlock();
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const h = await sha256(input.value);
+    if (h === PWD_HASH) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      errorEl.hidden = true;
+      unlock();
+    } else {
+      errorEl.hidden = false;
+      input.value = '';
+      input.focus();
+    }
+  });
+
+  logoutBtn?.addEventListener('click', lock);
+})();
+</script>
+</body>
+</html>
