@@ -2849,6 +2849,7 @@ body.popup-open { overflow: hidden; }
   .footer-cta { padding: 100px 20px 60px; }
   footer { flex-direction: column; gap: 16px; padding: 24px 20px; text-align: center; }
   .marquee-item { font-size: 28px; }
+  .marquee-track { animation-duration: 25s; }
 
   /* Tools strip mobile */
   .tools-strip { padding: 28px 0; }
