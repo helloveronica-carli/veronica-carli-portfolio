@@ -6,9 +6,105 @@
   if (!stage) return;
   const cards = stage.querySelectorAll('.card');
 
-  // Click su una carta: flip; se ce n'è un'altra aperta, chiudila prima
+  // ============ MOBILE: mazzo impilato + swipe ============
+  const MOBILE_BREAKPOINT = 768;
+  const isMobile = () => window.innerWidth <= MOBILE_BREAKPOINT;
+  const SWIPE_THRESHOLD = 90;
+  const cardsArr = Array.from(cards);
+  let suppressNextClick = false;
+
+  function applyStackOrder() {
+    cardsArr.forEach((c, i) => c.dataset.stack = i);
+  }
+  function recycleTop() {
+    // Trova la carta con stack=0, mettila in fondo, riassegna gli stack
+    const top = cardsArr.find(c => c.dataset.stack === '0');
+    if (!top) return;
+    const others = cardsArr.filter(c => c !== top)
+      .sort((a, b) => parseInt(a.dataset.stack) - parseInt(b.dataset.stack));
+    others.forEach((c, i) => c.dataset.stack = i);
+    top.dataset.stack = cardsArr.length - 1;
+  }
+
+  // Setup iniziale stack su mobile
+  if (isMobile()) applyStackOrder();
+  window.addEventListener('resize', () => {
+    if (isMobile()) {
+      applyStackOrder();
+    } else {
+      cardsArr.forEach(c => c.removeAttribute('data-stack'));
+    }
+  });
+
+  // Swipe handler — applicato a tutte le carte ma agisce solo sulla top
+  cardsArr.forEach(card => {
+    let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false;
+
+    card.addEventListener('pointerdown', (e) => {
+      if (!isMobile() || card.dataset.stack !== '0') return;
+      // Non attivare drag se l'utente preme su un link
+      if (e.target.closest('a')) return;
+      startX = e.clientX;
+      startY = e.clientY;
+      dx = dy = 0;
+      dragging = true;
+      card.classList.add('is-dragging');
+      try { card.setPointerCapture(e.pointerId); } catch(_) {}
+    });
+
+    card.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      dx = e.clientX - startX;
+      dy = e.clientY - startY;
+      const rot = dx / 18;
+      card.style.transform = `translate(calc(-50% + ${dx}px), -50%) rotate(${rot}deg)`;
+    });
+
+    card.addEventListener('pointerup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      card.classList.remove('is-dragging');
+      card.style.transform = '';
+      try { card.releasePointerCapture(e.pointerId); } catch(_) {}
+
+      const dist = Math.abs(dx);
+      if (dist > SWIPE_THRESHOLD) {
+        // Swipe out completo, poi ricicla in fondo
+        suppressNextClick = true;
+        const direction = dx > 0 ? 1 : -1;
+        const w = window.innerWidth;
+        card.classList.add('is-swiping-out');
+        card.style.transform = `translate(calc(-50% + ${direction * (w + 100)}px), -50%) rotate(${direction * 30}deg)`;
+        card.classList.remove('flipped');
+        setTimeout(() => {
+          recycleTop();
+          card.classList.remove('is-swiping-out');
+          card.style.transform = '';
+        }, 500);
+      } else if (dist > 5) {
+        // Drag piccolo, snap back e blocca il click che segue
+        suppressNextClick = true;
+      }
+    });
+
+    card.addEventListener('pointercancel', () => {
+      if (!dragging) return;
+      dragging = false;
+      card.classList.remove('is-dragging');
+      card.style.transform = '';
+    });
+  });
+
+  // Click su una carta: flip (se è la top su mobile, sempre su desktop).
+  // Se è appena avvenuto uno swipe/drag, salta.
   cards.forEach(card => {
     card.addEventListener('click', (e) => {
+      if (suppressNextClick) { suppressNextClick = false; return; }
+      if (isMobile() && card.dataset.stack !== '0') {
+        // Tap su carta non-top: portala in cima ciclando finché non ci arriva
+        // Più semplice: ignoriamo il tap se non è top (forza lo swipe per cambiare)
+        return;
+      }
       e.stopPropagation();
       const wasFlipped = card.classList.contains('flipped');
       cards.forEach(c => c.classList.remove('flipped'));
