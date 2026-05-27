@@ -607,3 +607,38 @@
     tile.appendChild(btn);
   });
 })();
+
+// ====================================
+//  ABOUT — effetto magnete sulle capability card
+// ====================================
+(function () {
+  // Solo dispositivi con hover reale (no touch)
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  const cards = document.querySelectorAll('.capabilities-grid .capability');
+  if (!cards.length) return;
+
+  const STRENGTH_X = 14;   // px di spostamento orizzontale massimo
+  const STRENGTH_Y = 10;   // px verticale massimo
+
+  cards.forEach(card => {
+    let rafId = null;
+
+    card.addEventListener('pointermove', (e) => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const r = card.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+        const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+        card.style.transition = 'transform 0.12s ease-out';
+        card.style.transform = `translate3d(${dx * STRENGTH_X}px, ${dy * STRENGTH_Y}px, 0)`;
+      });
+    });
+
+    card.addEventListener('pointerleave', () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      card.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+      card.style.transform = '';
+    });
+  });
+})();
