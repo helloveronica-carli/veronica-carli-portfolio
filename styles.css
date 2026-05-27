@@ -2906,6 +2906,7 @@ body.popup-open { overflow: hidden; }
   .playground { padding: 100px 20px 40px; }
   html:has(body.page-playground) {
     scroll-snap-type: y mandatory;
+    overflow-y: auto;
   }
   .card-stage {
     height: auto;
