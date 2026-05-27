@@ -2910,8 +2910,8 @@ body.popup-open { overflow: hidden; }
     top: auto;
     left: auto;
     margin: 14px auto;
-    width: 200px;
-    height: 310px;
+    width: 290px;
+    height: 440px;
     transform: rotate(0) !important;
     animation: deal-out-mobile 0.5s ease-out forwards;
   }
