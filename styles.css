@@ -2857,8 +2857,13 @@ body.popup-open { overflow: hidden; }
   .tools-label { padding: 0 20px 16px; }
   .tool-item { height: 32px; padding-right: 56px; }
 
-  /* Intro pair mobile: stack verticale */
+  /* Intro pair mobile: stack verticale + label sopra a titolo */
   .case-section-pair { grid-template-columns: 1fr; }
+  .case-section-pair > .case-section {
+    grid-template-columns: 1fr;
+    padding: 50px 20px;
+    gap: 16px;
+  }
   .case-section-pair > .case-section + .case-section {
     border-left: none;
     border-top: 1px solid var(--line);
