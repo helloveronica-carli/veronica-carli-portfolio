@@ -2892,11 +2892,15 @@ body.popup-open { overflow: hidden; }
   nav .nav-right { margin-left: auto; }      /* spinge il lang switch verso destra */
   nav .nav-right + .nav-toggle { margin-left: 12px; }  /* piccolo gap tra lang e hamburger */
 
-  .hero { padding: 100px 20px 40px; }
-  .hero-title { font-size: 52px; letter-spacing: -0.04em; }
+  .hero {
+    padding: 100px 20px 40px;
+    min-height: auto;
+    justify-content: flex-start;
+  }
+  .hero-title { font-size: 52px; letter-spacing: -0.04em; margin-bottom: 28px; }
   .hero-in-mobile  { display: inline; }
   .hero-in-desktop { display: none; }
-  .hero-bottom { grid-template-columns: 1fr; gap: 32px; }
+  .hero-bottom { grid-template-columns: 1fr; gap: 28px; margin-top: 0; }
   .hero-positioning { grid-column: span 1; }
   .hero-cta { align-items: flex-start; }
   .section-header { padding: 60px 20px 32px; grid-template-columns: 1fr; gap: 16px; }
