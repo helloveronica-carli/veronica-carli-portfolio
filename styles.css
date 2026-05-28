@@ -3140,10 +3140,12 @@ body.popup-open { overflow: hidden; }
 .capability--featured { background: var(--electric); }
 .capability--featured .cap-num { color: var(--bg); }
 
-/* Break solo mobile (es. headline About "AI. / Sempre insieme") */
+/* Break responsivi (es. headline About) */
 .br-mobile { display: none; }
+.br-desktop { display: inline; }
 @media (max-width: 768px) {
   .br-mobile { display: inline; }
+  .br-desktop { display: none; }
 }
 
 /* ====================================
