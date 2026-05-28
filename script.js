@@ -205,16 +205,34 @@
       hero.classList.remove('has-image');
     }
 
-    // Gallery: priorità a IG embeds → poi immagini → poi placeholder
+    // Gallery: priorità a articoli → IG embeds → immagini → placeholder
     galleryGrid.innerHTML = '';
-    galleryGrid.classList.remove('is-ig-embeds');
+    galleryGrid.classList.remove('is-ig-embeds', 'is-articles');
 
+    // data-articles = "imgURL|articleURL, imgURL|articleURL, ..."
+    const articles = (link.dataset.articles || '')
+      .split(',').map(s => s.trim()).filter(Boolean)
+      .map(pair => {
+        const [img, url] = pair.split('|').map(p => (p || '').trim());
+        return { img, url };
+      });
     const igPosts = (link.dataset.igPosts || '')
       .split(',').map(s => s.trim()).filter(Boolean);
     const galleryUrls = (link.dataset.gallery || '')
       .split(',').map(s => s.trim()).filter(Boolean);
 
-    if (igPosts.length > 0) {
+    if (articles.length > 0) {
+      galleryGrid.classList.add('is-articles');
+      articles.forEach((a, i) => {
+        const tile = document.createElement('a');
+        tile.className = 'popup-article-tile' + (i === 0 ? ' is-hero' : '');
+        tile.href = a.url || '#';
+        tile.target = '_blank';
+        tile.rel = 'noopener';
+        if (a.img) tile.style.backgroundImage = `url("${a.img}")`;
+        galleryGrid.appendChild(tile);
+      });
+    } else if (igPosts.length > 0) {
       galleryGrid.classList.add('is-ig-embeds');
       igPosts.forEach(url => {
         const tile = document.createElement('div');

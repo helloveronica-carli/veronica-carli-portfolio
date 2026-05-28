@@ -2830,6 +2830,31 @@ footer a:hover { color: var(--accent); }
   font-weight: 300;
 }
 
+/* Gallery articoli: primo in primo piano (hero), gli altri 2 affiancati sotto */
+.popup-gallery-grid.is-articles {
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.popup-article-tile {
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--bg-soft);
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.popup-article-tile.is-hero {
+  grid-column: 1 / -1;
+  aspect-ratio: 16 / 9;
+}
+.popup-article-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(10, 10, 10, 0.18);
+}
+
 /* Gallery con embed Instagram: niente aspect-ratio forzato, altezza dinamica */
 .popup-gallery-grid.is-ig-embeds {
   grid-template-columns: repeat(3, 1fr);
