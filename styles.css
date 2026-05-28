@@ -2510,14 +2510,6 @@ footer a:hover { color: var(--accent); }
   color: var(--card-color);
   line-height: 1;
   margin-top: -10px;
-  animation: card-symbol-float 4.5s ease-in-out infinite;
-}
-.card:nth-child(2) .card-symbol { animation-delay: 0.7s; }
-.card:nth-child(3) .card-symbol { animation-delay: 1.4s; }
-.card:nth-child(4) .card-symbol { animation-delay: 2.1s; }
-@keyframes card-symbol-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-9px); }
 }
 
 .card-title {
