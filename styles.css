@@ -3134,7 +3134,7 @@ body.popup-open { overflow: hidden; }
 
 /* ABOUT */
 /* Art Director & Communication Designer, Milano, IT */
-.about-role { color: var(--electric); }
+.about-role { color: var(--bg); }
 
 /* Rettangolo AI Creative Communication (featured capability) */
 .capability--featured { background: var(--electric); }
