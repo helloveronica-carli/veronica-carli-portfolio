@@ -2622,7 +2622,7 @@ footer a:hover { color: var(--accent); }
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: rgba(239, 238, 233, 0.4);
-  margin: 0 0 32px;
+  margin: 28px 0 32px;
 }
 .playground-hint .hint-mobile { display: none; }
 @media (max-width: 768px) {
