@@ -246,7 +246,32 @@ nav {
   flex-direction: column;
   justify-content: space-between;
   gap: 60px;
+  position: relative;
 }
+
+/* X di chiusura dentro al pannello mobile */
+.mobile-nav-close {
+  position: absolute;
+  top: 28px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+}
+.mobile-nav-close span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 2px;
+  background: var(--bg);
+  border-radius: 2px;
+}
+.mobile-nav-close span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
+.mobile-nav-close span:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
 
 .mobile-nav-links {
   list-style: none;

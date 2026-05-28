@@ -312,6 +312,15 @@
     setOpen(!open);
   });
 
+  // Bottone X di chiusura dentro al pannello (iniettato, vale per tutte le pagine)
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'mobile-nav-close';
+  closeBtn.type = 'button';
+  closeBtn.setAttribute('aria-label', 'Chiudi menu');
+  closeBtn.innerHTML = '<span></span><span></span>';
+  closeBtn.addEventListener('click', () => setOpen(false));
+  (panel.querySelector('.mobile-nav-inner') || panel).appendChild(closeBtn);
+
   // Chiusura tap link
   panel.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => setOpen(false));
