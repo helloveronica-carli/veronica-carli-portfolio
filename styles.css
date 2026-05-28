@@ -3140,6 +3140,12 @@ body.popup-open { overflow: hidden; }
 .capability--featured { background: var(--electric); }
 .capability--featured .cap-num { color: var(--bg); }
 
+/* Break solo mobile (es. headline About "AI. / Sempre insieme") */
+.br-mobile { display: none; }
+@media (max-width: 768px) {
+  .br-mobile { display: inline; }
+}
+
 /* ====================================
    PROGETTI PLUS — CTA in /work e pagina protetta
    ==================================== */
