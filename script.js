@@ -544,6 +544,11 @@
     document.querySelectorAll('.lang-switch button').forEach((btn) => {
       btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
     });
+
+    document.querySelectorAll('.lang-switch').forEach((sw) => {
+      sw.classList.toggle('lang-en', lang === 'en');
+      sw.classList.toggle('lang-it', lang === 'it');
+    });
   }
 
   let currentLang = savedLang;
