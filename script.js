@@ -209,12 +209,12 @@
     galleryGrid.innerHTML = '';
     galleryGrid.classList.remove('is-ig-embeds', 'is-articles');
 
-    // data-articles = "imgURL|articleURL, imgURL|articleURL, ..."
+    // data-articles = "img|url|title|excerpt|minutes ;; img|url|title|excerpt|minutes ;; ..."
     const articles = (link.dataset.articles || '')
-      .split(',').map(s => s.trim()).filter(Boolean)
-      .map(pair => {
-        const [img, url] = pair.split('|').map(p => (p || '').trim());
-        return { img, url };
+      .split(';;').map(s => s.trim()).filter(Boolean)
+      .map(item => {
+        const [img, url, title, excerpt, minutes] = item.split('|').map(p => (p || '').trim());
+        return { img, url, title, excerpt, minutes };
       });
     const igPosts = (link.dataset.igPosts || '')
       .split(',').map(s => s.trim()).filter(Boolean);
@@ -229,7 +229,21 @@
         tile.href = a.url || '#';
         tile.target = '_blank';
         tile.rel = 'noopener';
-        if (a.img) tile.style.backgroundImage = `url("${a.img}")`;
+
+        const cover = document.createElement('div');
+        cover.className = 'popup-article-cover';
+        if (a.img) cover.style.backgroundImage = `url("${a.img}")`;
+        tile.appendChild(cover);
+
+        const info = document.createElement('div');
+        info.className = 'popup-article-info';
+        let html = '';
+        if (a.title)   html += `<h4 class="popup-article-title">${a.title}</h4>`;
+        if (a.excerpt) html += `<p class="popup-article-excerpt">${a.excerpt}</p>`;
+        if (a.minutes) html += `<span class="popup-article-meta">${a.minutes}</span>`;
+        info.innerHTML = html;
+        tile.appendChild(info);
+
         galleryGrid.appendChild(tile);
       });
     } else if (igPosts.length > 0) {

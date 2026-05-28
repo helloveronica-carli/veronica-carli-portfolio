@@ -2836,23 +2836,56 @@ footer a:hover { color: var(--accent); }
   gap: 12px;
 }
 .popup-article-tile {
-  display: block;
-  aspect-ratio: 16 / 10;
+  display: flex;
+  flex-direction: column;
   border-radius: 8px;
-  background-size: cover;
-  background-position: center;
-  background-color: var(--bg-soft);
-  text-decoration: none;
   overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--fg);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.popup-article-tile.is-hero {
-  grid-column: 1 / -1;
-  aspect-ratio: 16 / 9;
-}
+.popup-article-tile.is-hero { grid-column: 1 / -1; }
 .popup-article-tile:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(10, 10, 10, 0.18);
+}
+.popup-article-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center top;
+  background-color: var(--bg-soft);
+}
+.popup-article-tile.is-hero .popup-article-cover { aspect-ratio: 16 / 7.5; }
+.popup-article-info { padding: 14px 16px 16px; }
+.popup-article-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  color: var(--fg);
+}
+.popup-article-tile.is-hero .popup-article-title { font-size: 22px; }
+.popup-article-excerpt {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  margin: 0 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.popup-article-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
 /* Gallery con embed Instagram: niente aspect-ratio forzato, altezza dinamica */
