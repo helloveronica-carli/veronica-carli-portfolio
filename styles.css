@@ -2830,6 +2830,82 @@ footer a:hover { color: var(--accent); }
   font-weight: 300;
 }
 
+/* SNAKE (omaggio Nokia 3310) nel popup */
+.popup-gallery-grid.is-snake { display: block; }
+.popup-gallery:has(.is-snake) .popup-gallery-label { display: none; }
+.snake-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.snake-screen { position: relative; width: 280px; max-width: 100%; }
+.snake-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  background: #aaca5a;
+  border: 3px solid #2f3b1e;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+.snake-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  padding: 20px;
+  background: rgba(47, 59, 30, 0.85);
+  color: #aaca5a;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.snake-overlay-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.snake-overlay-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+.snake-hud {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  display: flex;
+  gap: 8px;
+}
+.snake-dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.snake-dpad-mid { display: flex; gap: 6px; }
+.snake-dpad button {
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  border-radius: 8px;
+  font-size: 15px;
+  color: var(--fg);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.snake-dpad button:active { background: var(--fg); color: var(--bg); }
+
 /* Gallery articoli: primo in primo piano (hero), gli altri 2 affiancati sotto */
 .popup-gallery-grid.is-articles {
   grid-template-columns: 1fr 1fr;

@@ -182,6 +182,113 @@
   const ctaEl       = popup.querySelector('[data-cta]');
   const ctaLabel    = popup.querySelector('[data-cta-label]');
 
+  let activeSnakeStop = null;
+
+  // ---- SNAKE (omaggio Nokia 3310) ----
+  function initSnakeGame(root) {
+    const canvas = root.querySelector('.snake-canvas');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = root.querySelector('[data-snake-score]');
+    const overlay = root.querySelector('[data-snake-overlay]');
+    const overlayTitle = overlay.querySelector('.snake-overlay-title');
+    const overlaySub = overlay.querySelector('.snake-overlay-sub');
+
+    const GRID = 14;
+    const CELL = canvas.width / GRID;
+    const LCD_BG = '#aaca5a';
+    const LCD_FG = '#2f3b1e';
+    let snake, dir, nextDir, food, score, running = false, dead = false, timer = null;
+
+    function placeFood() {
+      do {
+        food = { x: Math.floor(Math.random() * GRID), y: Math.floor(Math.random() * GRID) };
+      } while (snake.some(s => s.x === food.x && s.y === food.y));
+    }
+    function reset() {
+      snake = [{x:7,y:7},{x:6,y:7},{x:5,y:7}];
+      dir = {x:1,y:0}; nextDir = {x:1,y:0};
+      score = 0; dead = false;
+      scoreEl.textContent = '0';
+      placeFood(); draw();
+    }
+    function draw() {
+      ctx.fillStyle = LCD_BG; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = LCD_FG;
+      ctx.fillRect(food.x*CELL+3, food.y*CELL+3, CELL-6, CELL-6);
+      snake.forEach(s => ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2));
+    }
+    function tick() {
+      dir = nextDir;
+      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      if (head.x<0 || head.x>=GRID || head.y<0 || head.y>=GRID ||
+          snake.some(s => s.x===head.x && s.y===head.y)) { gameOver(); return; }
+      snake.unshift(head);
+      if (head.x===food.x && head.y===food.y) { score++; scoreEl.textContent = score; placeFood(); }
+      else snake.pop();
+      draw();
+    }
+    function start() {
+      if (running) return;
+      if (dead) reset();
+      running = true;
+      overlay.style.display = 'none';
+      timer = setInterval(tick, 130);
+    }
+    function gameOver() {
+      clearInterval(timer); timer = null; running = false; dead = true;
+      overlayTitle.textContent = 'Game Over';
+      overlaySub.textContent = 'Score ' + score + ' · tocca per rigiocare';
+      overlay.style.display = '';
+    }
+    function setDir(nx, ny) {
+      if (nx === -dir.x && ny === -dir.y) return; // no inversione a U
+      nextDir = { x:nx, y:ny };
+    }
+    function onKey(e) {
+      let ok = true;
+      switch (e.key) {
+        case 'ArrowUp': case 'w': setDir(0,-1); break;
+        case 'ArrowDown': case 's': setDir(0,1); break;
+        case 'ArrowLeft': case 'a': setDir(-1,0); break;
+        case 'ArrowRight': case 'd': setDir(1,0); break;
+        default: ok = false;
+      }
+      if (ok) { e.preventDefault(); start(); }
+    }
+    document.addEventListener('keydown', onKey);
+
+    root.querySelectorAll('[data-dir]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const d = btn.dataset.dir;
+        if (d==='up') setDir(0,-1);
+        else if (d==='down') setDir(0,1);
+        else if (d==='left') setDir(-1,0);
+        else if (d==='right') setDir(1,0);
+        start();
+      });
+    });
+    overlay.addEventListener('click', (e) => { e.stopPropagation(); start(); });
+    canvas.addEventListener('click', (e) => e.stopPropagation());
+
+    let sx = 0, sy = 0;
+    canvas.addEventListener('pointerdown', (e) => { e.stopPropagation(); sx = e.clientX; sy = e.clientY; });
+    canvas.addEventListener('pointerup', (e) => {
+      e.stopPropagation();
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) < 12 && Math.abs(dy) < 12) { start(); return; }
+      if (Math.abs(dx) > Math.abs(dy)) setDir(dx>0?1:-1, 0); else setDir(0, dy>0?1:-1);
+      start();
+    });
+
+    reset();
+
+    return function stop() {
+      clearInterval(timer); timer = null; running = false;
+      document.removeEventListener('keydown', onKey);
+    };
+  }
+
   function openPopup(link) {
     // Colore tematico ereditato dalla carta genitore
     const parentCard = link.closest('.card');
@@ -205,9 +312,43 @@
       hero.classList.remove('has-image');
     }
 
-    // Gallery: priorità a articoli → IG embeds → immagini → placeholder
+    // Gallery: priorità a snake → articoli → IG embeds → immagini → placeholder
+    if (activeSnakeStop) { activeSnakeStop(); activeSnakeStop = null; }
     galleryGrid.innerHTML = '';
-    galleryGrid.classList.remove('is-ig-embeds', 'is-articles');
+    galleryGrid.classList.remove('is-ig-embeds', 'is-articles', 'is-snake');
+
+    if (link.dataset.snake === 'true') {
+      galleryGrid.classList.add('is-snake');
+      const wrap = document.createElement('div');
+      wrap.className = 'snake-game';
+      wrap.innerHTML =
+        '<div class="snake-screen">' +
+          '<canvas class="snake-canvas" width="280" height="280"></canvas>' +
+          '<div class="snake-overlay" data-snake-overlay>' +
+            '<span class="snake-overlay-title">Snake</span>' +
+            '<span class="snake-overlay-sub">Premi una freccia o tocca per iniziare</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="snake-hud"><span>Score</span><span data-snake-score>0</span></div>' +
+        '<div class="snake-dpad">' +
+          '<button type="button" data-dir="up" aria-label="Su">▲</button>' +
+          '<div class="snake-dpad-mid">' +
+            '<button type="button" data-dir="left" aria-label="Sinistra">◀</button>' +
+            '<button type="button" data-dir="down" aria-label="Giù">▼</button>' +
+            '<button type="button" data-dir="right" aria-label="Destra">▶</button>' +
+          '</div>' +
+        '</div>';
+      galleryGrid.appendChild(wrap);
+      activeSnakeStop = initSnakeGame(wrap);
+      galleryWrap.style.display = '';
+      // CTA off per snake
+      ctaWrap.style.display = 'none';
+      popup.classList.add('open');
+      popup.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('popup-open');
+      popupWindow.scrollTop = 0;
+      return;
+    }
 
     // data-articles = "img|url|title|excerpt|minutes ;; img|url|title|excerpt|minutes ;; ..."
     const articles = (link.dataset.articles || '')
@@ -302,6 +443,7 @@
   }
 
   function closePopup() {
+    if (activeSnakeStop) { activeSnakeStop(); activeSnakeStop = null; }
     popup.classList.remove('open');
     popup.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('popup-open');
