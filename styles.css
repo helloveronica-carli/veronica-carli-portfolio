@@ -2833,13 +2833,30 @@ footer a:hover { color: var(--accent); }
 /* SNAKE (omaggio Nokia 3310) nel popup */
 .popup-gallery-grid.is-snake { display: block; }
 .popup-gallery:has(.is-snake) .popup-gallery-label { display: none; }
+
+/* Popup in modalità snake: header compatto, niente banner immagine */
+.popup-window.is-snake-popup .popup-hero {
+  aspect-ratio: auto;
+  background: transparent;
+  padding: 40px 40px 0;
+}
+.popup-window.is-snake-popup .popup-hero-img,
+.popup-window.is-snake-popup .popup-hero-overlay { display: none; }
+.popup-window.is-snake-popup .popup-hero-content {
+  position: static;
+  inset: auto;
+}
+.popup-window.is-snake-popup .popup-tag { color: var(--electric); }
+.popup-window.is-snake-popup .popup-title { color: var(--fg); text-shadow: none; }
+.popup-window.is-snake-popup .popup-body { padding-top: 16px; }
+
 .snake-game {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
 }
-.snake-screen { position: relative; width: 280px; max-width: 100%; }
+.snake-screen { position: relative; width: min(380px, 100%); max-width: 100%; }
 .snake-canvas {
   width: 100%;
   height: auto;

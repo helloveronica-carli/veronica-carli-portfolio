@@ -296,6 +296,7 @@
       ? (parentCard.style.getPropertyValue('--card-color').trim() || '#555')
       : '#555';
     popupWindow.style.setProperty('--popup-color', color);
+    popupWindow.classList.remove('is-snake-popup');
 
     // Tag, titolo, descrizione
     tagEl.textContent   = link.dataset.tag   || '';
@@ -318,12 +319,13 @@
     galleryGrid.classList.remove('is-ig-embeds', 'is-articles', 'is-snake');
 
     if (link.dataset.snake === 'true') {
+      popupWindow.classList.add('is-snake-popup');
       galleryGrid.classList.add('is-snake');
       const wrap = document.createElement('div');
       wrap.className = 'snake-game';
       wrap.innerHTML =
         '<div class="snake-screen">' +
-          '<canvas class="snake-canvas" width="280" height="280"></canvas>' +
+          '<canvas class="snake-canvas" width="420" height="420"></canvas>' +
           '<div class="snake-overlay" data-snake-overlay>' +
             '<span class="snake-overlay-title">Snake</span>' +
             '<span class="snake-overlay-sub">Premi una freccia o tocca per iniziare</span>' +
