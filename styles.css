@@ -2301,17 +2301,6 @@ footer a:hover { color: var(--accent); }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Luce che segue il cursore (desktop) */
-.playground::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 35%), rgba(255, 90, 31, 0.10), transparent 65%);
-  transition: background 0.18s ease-out;
-}
-
 /* Contenuto sopra atmosfera */
 .playground-header,
 .card-stage,
