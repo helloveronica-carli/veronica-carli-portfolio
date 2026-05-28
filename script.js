@@ -1,4 +1,22 @@
 // ====================================
+//  PLAYGROUND — luce che segue il cursore
+// ====================================
+(function () {
+  const pg = document.querySelector('.playground');
+  if (!pg) return;
+  if (window.matchMedia('(hover: none)').matches) return;
+  let raf = null;
+  pg.addEventListener('pointermove', (e) => {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const r = pg.getBoundingClientRect();
+      pg.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      pg.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+})();
+
+// ====================================
 //  PLAYGROUND — flip carte + reshuffle
 // ====================================
 (function () {

@@ -2279,13 +2279,44 @@ footer a:hover { color: var(--accent); }
    PLAYGROUND — mazzo di carte da cartomante
    ==================================== */
 .playground {
-  background: var(--dark);
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 62%, rgba(255, 90, 31, 0.10), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 58%, rgba(0, 0, 238, 0.07), transparent 72%),
+    var(--dark);
   color: var(--bg);
   padding: 120px 40px 60px;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
 }
+
+/* Grana sottile sopra lo sfondo */
+.playground::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Luce che segue il cursore (desktop) */
+.playground::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 35%), rgba(255, 90, 31, 0.10), transparent 65%);
+  transition: background 0.18s ease-out;
+}
+
+/* Contenuto sopra atmosfera */
+.playground-header,
+.card-stage,
+.playground-hint,
+.reshuffle-btn { position: relative; z-index: 1; }
 
 .playground-header {
   max-width: 880px;
@@ -2381,6 +2412,14 @@ footer a:hover { color: var(--accent); }
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Glow colorato sul fronte all'hover */
+.card:hover .card-front {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45),
+              0 0 46px -10px var(--card-color);
+  border-color: var(--card-color);
+}
+.card-front { transition: box-shadow 0.4s ease, border-color 0.4s ease; }
+
 /* Quando flippa, viene avanti centrale e si raddrizza */
 .card.flipped {
   transform: translate(-50%, -50%) rotate(0) scale(1.08);
@@ -2471,6 +2510,14 @@ footer a:hover { color: var(--accent); }
   color: var(--card-color);
   line-height: 1;
   margin-top: -10px;
+  animation: card-symbol-float 4.5s ease-in-out infinite;
+}
+.card:nth-child(2) .card-symbol { animation-delay: 0.7s; }
+.card:nth-child(3) .card-symbol { animation-delay: 1.4s; }
+.card:nth-child(4) .card-symbol { animation-delay: 2.1s; }
+@keyframes card-symbol-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
 }
 
 .card-title {
