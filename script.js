@@ -546,13 +546,21 @@
     });
   }
 
-  applyLang(savedLang);
+  let currentLang = savedLang;
+  applyLang(currentLang);
 
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const lang = btn.getAttribute('data-lang');
-      localStorage.setItem(STORAGE_KEY, lang);
-      applyLang(lang);
+  function toggleLang() {
+    currentLang = currentLang === 'it' ? 'en' : 'it';
+    localStorage.setItem(STORAGE_KEY, currentLang);
+    applyLang(currentLang);
+  }
+
+  // Un click qualsiasi sullo switch alterna IT <-> EN
+  document.querySelectorAll('.lang-switch').forEach((sw) => {
+    sw.style.cursor = 'pointer';
+    sw.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleLang();
     });
   });
 })();
