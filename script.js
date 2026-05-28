@@ -195,8 +195,8 @@
 
     const GRID = 14;
     const CELL = canvas.width / GRID;
-    const LCD_BG = '#aaca5a';
-    const LCD_FG = '#2f3b1e';
+    const LCD_BG = '#FF5A1F';
+    const LCD_FG = '#0000EE';
     let snake, dir, nextDir, food, score, running = false, dead = false, timer = null;
 
     function placeFood() {

@@ -2862,8 +2862,8 @@ footer a:hover { color: var(--accent); }
   height: auto;
   display: block;
   border-radius: 6px;
-  background: #aaca5a;
-  border: 3px solid #2f3b1e;
+  background: #FF5A1F;
+  border: 3px solid #0000EE;
   image-rendering: pixelated;
   touch-action: none;
 }
@@ -2877,8 +2877,8 @@ footer a:hover { color: var(--accent); }
   gap: 6px;
   text-align: center;
   padding: 20px;
-  background: rgba(47, 59, 30, 0.85);
-  color: #aaca5a;
+  background: rgba(0, 0, 238, 0.85);
+  color: #fff;
   border-radius: 6px;
   cursor: pointer;
 }
