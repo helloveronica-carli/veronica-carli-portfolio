@@ -437,14 +437,11 @@
         tile.style.backgroundImage = `url("${url}")`;
         galleryGrid.appendChild(tile);
       });
-    } else {
-      for (let i = 0; i < 3; i++) {
-        const tile = document.createElement('div');
-        tile.className = 'popup-gallery-tile is-placeholder';
-        galleryGrid.appendChild(tile);
-      }
     }
-    galleryWrap.style.display = '';
+
+    // Mostra la sezione anteprima solo se c'è davvero qualcosa
+    const hasGallery = photos.length || articles.length || igPosts.length || galleryUrls.length;
+    galleryWrap.style.display = hasGallery ? '' : 'none';
 
     // CTA opzionale
     if (link.dataset.ctaUrl) {
