@@ -316,7 +316,7 @@
     // Gallery: priorità a snake → articoli → IG embeds → immagini → placeholder
     if (activeSnakeStop) { activeSnakeStop(); activeSnakeStop = null; }
     galleryGrid.innerHTML = '';
-    galleryGrid.classList.remove('is-ig-embeds', 'is-articles', 'is-snake');
+    galleryGrid.classList.remove('is-ig-embeds', 'is-articles', 'is-snake', 'is-photos');
 
     if (link.dataset.snake === 'true') {
       popupWindow.classList.add('is-snake-popup');
@@ -359,12 +359,30 @@
         const [img, url, title, excerpt, minutes] = item.split('|').map(p => (p || '').trim());
         return { img, url, title, excerpt, minutes };
       });
+    // data-photos = "img|url, img|url, ..." (solo foto cliccabili, niente chrome IG)
+    const photos = (link.dataset.photos || '')
+      .split(',').map(s => s.trim()).filter(Boolean)
+      .map(pair => {
+        const [img, url] = pair.split('|').map(p => (p || '').trim());
+        return { img, url };
+      });
     const igPosts = (link.dataset.igPosts || '')
       .split(',').map(s => s.trim()).filter(Boolean);
     const galleryUrls = (link.dataset.gallery || '')
       .split(',').map(s => s.trim()).filter(Boolean);
 
-    if (articles.length > 0) {
+    if (photos.length > 0) {
+      galleryGrid.classList.add('is-photos');
+      photos.forEach(p => {
+        const tile = document.createElement('a');
+        tile.className = 'popup-photo-tile';
+        tile.href = p.url || '#';
+        tile.target = '_blank';
+        tile.rel = 'noopener';
+        if (p.img) tile.style.backgroundImage = `url("${p.img}")`;
+        galleryGrid.appendChild(tile);
+      });
+    } else if (articles.length > 0) {
       galleryGrid.classList.add('is-articles');
       articles.forEach((a, i) => {
         const tile = document.createElement('a');

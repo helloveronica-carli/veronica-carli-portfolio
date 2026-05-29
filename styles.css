@@ -2951,6 +2951,26 @@ footer a:hover { color: var(--accent); }
 }
 .snake-dpad button:active { background: var(--fg); color: var(--bg); }
 
+/* Gallery solo-foto: griglia di immagini quadrate cliccabili (no chrome IG) */
+.popup-gallery-grid.is-photos {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.popup-photo-tile {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--bg-soft);
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.popup-photo-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(10, 10, 10, 0.18);
+}
+
 /* Gallery articoli: primo in primo piano (hero), gli altri 2 affiancati sotto */
 .popup-gallery-grid.is-articles {
   grid-template-columns: 1fr 1fr;
