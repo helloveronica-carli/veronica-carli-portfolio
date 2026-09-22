@@ -946,7 +946,7 @@ footer a:hover { color: var(--accent); }
 }
 
 .case-section .label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -958,9 +958,9 @@ footer a:hover { color: var(--accent); }
 }
 
 .case-section .label .num,
+.case-asset .asset-label .num,
 .label-credits .num {
-  color: var(--accent);
-  margin-right: 4px;
+  display: none;
 }
 
 .case-section .content {
@@ -1170,7 +1170,7 @@ footer a:hover { color: var(--accent); }
 }
 
 .case-asset .asset-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1178,8 +1178,7 @@ footer a:hover { color: var(--accent); }
   padding-top: 12px;
 }
 .case-asset .asset-label .num {
-  color: var(--accent);
-  margin-right: 4px;
+  display: none;
 }
 
 .asset-title {
@@ -1460,7 +1459,7 @@ footer a:hover { color: var(--accent); }
 }
 
 .label-credits {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
