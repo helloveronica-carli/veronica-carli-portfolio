@@ -172,7 +172,9 @@
       const s = q.size * (0.5 + 0.5 * k);
       if (q.col !== lastCol) { ctx.fillStyle = q.col; lastCol = q.col; }
       ctx.globalAlpha = q.a * k * k;
-      ctx.fillRect(q.x - s / 2, q.y - s / 2, s, s);
+      ctx.beginPath(); // round grains
+      ctx.arc(q.x, q.y, s / 2, 0, Math.PI * 2);
+      ctx.fill();
     }
     ctx.globalAlpha = 1;
   }

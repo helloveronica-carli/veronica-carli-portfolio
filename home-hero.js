@@ -78,6 +78,18 @@
   // ink, orange, cream, blue
   const RGB = ['10,10,10', '255,90,31', '239,238,233', '0,0,238'];
   const INK = 0, ORANGE = 1, CREAM = 2, BLUE = 3;
+  const TAU = Math.PI * 2;
+  // Round grains: one small pre-drawn dot per colour, scaled down when drawn (cheap and antialiased)
+  const DOT = RGB.map((rgb) => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 32;
+    const g = c.getContext('2d');
+    g.fillStyle = `rgb(${rgb})`;
+    g.beginPath();
+    g.arc(16, 16, 15, 0, TAU);
+    g.fill();
+    return c;
+  });
   const FEATHER = 0.035;
 
   // The edge wobbles the same way for the hole and for the particles that sit on it.
@@ -457,7 +469,7 @@
         x += q.dx; y += q.dy;
         if (x < -4 || y < -4 || x > vw + 4 || y > vh + 4) continue;
         dctx.globalAlpha = q.alpha * ik;
-        dctx.fillRect(x - q.size / 2, y - q.size / 2, q.size, q.size);
+        dctx.drawImage(DOT[c], x - q.size / 2, y - q.size / 2, q.size, q.size);
       }
     }
     dctx.globalAlpha = 1;
@@ -490,7 +502,8 @@
   }
 
   // A lazy, curling drift: vapour, not sparks. Returns false once the grain is gone.
-  function drift(q, dt, t) {
+  // dot: the pre-drawn round grain for palette colours; without it a circle is drawn in the current fill colour.
+  function drift(q, dt, t, dot) {
     q.life -= dt;
     if (q.life <= 0) return false;
     const n = Math.sin(q.y * 0.018 + t * 1.3) + Math.cos(q.x * 0.014 - t * 0.9);
@@ -503,7 +516,13 @@
     const k = q.life / q.max;
     const s = q.size * (0.5 + 0.5 * k);
     dctx.globalAlpha = q.a * k * k;
-    dctx.fillRect(q.x - s / 2, q.y - s / 2, s, s);
+    if (dot) {
+      dctx.drawImage(dot, q.x - s / 2, q.y - s / 2, s, s);
+    } else {
+      dctx.beginPath();
+      dctx.arc(q.x, q.y, s / 2, 0, TAU);
+      dctx.fill();
+    }
     return true;
   }
 
@@ -511,9 +530,8 @@
     for (let c = 0; c < 4; c++) {
       const arr = DUST[c];
       if (!arr.length) continue;
-      dctx.fillStyle = `rgb(${RGB[c]})`;
       for (let i = arr.length - 1; i >= 0; i--) {
-        if (!drift(arr[i], dt, t)) { arr[i] = arr[arr.length - 1]; arr.pop(); dustCount--; }
+        if (!drift(arr[i], dt, t, DOT[c])) { arr[i] = arr[arr.length - 1]; arr.pop(); dustCount--; }
       }
     }
     let lastCol = '';
