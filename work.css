@@ -5,7 +5,7 @@
 .wk-page {
   background: var(--dark);
   color: var(--bg);
-  padding: 130px 0 0;
+  padding: 130px 0 96px;
 }
 
 /* H1 di pagina */
@@ -113,19 +113,11 @@
   z-index: 50;
 }
 
-/* Progetti Plus sul nero */
-.wk-page .work-plus-cta { padding: 96px 40px 100px; }
-.wk-page .work-plus-link { border-color: var(--bg); color: var(--bg); }
-.wk-page .work-plus-link:hover { background: var(--bg); color: var(--fg); }
-.wk-page .work-plus-icon { color: var(--accent); }
-.wk-page .work-plus-note { color: rgba(239, 238, 233, 0.6); }
-
 @media (max-width: 720px) {
-  .wk-page { padding-top: 100px; }
+  .wk-page { padding: 100px 0 72px; }
   .wk-head { padding: 0 20px 4px; }
   .wk-cat { padding-top: 48px; }
   .wk-cat-title { padding: 0 20px; }
   .wk-card { width: 72vw; }
   .wk-row:not(.is-loop) .wk-track { padding: 0 20px; }
-  .wk-page .work-plus-cta { padding: 72px 20px 80px; }
 }
