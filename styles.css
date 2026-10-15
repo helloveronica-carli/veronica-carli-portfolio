@@ -1852,6 +1852,7 @@ footer a:hover { color: var(--accent); }
 
 .work-moodboard-section .section-header {
   padding: 130px 40px 60px;
+  display: block; /* niente etichetta numerata: il titolo parte da sinistra */
 }
 .work-moodboard-section .section-number { color: var(--muted); }
 .work-moodboard-section .section-title  { color: var(--fg); }
@@ -3133,7 +3134,7 @@ body.popup-open { overflow: hidden; }
   .section-header { padding: 60px 20px 32px; grid-template-columns: 1fr; gap: 16px; }
 
   /* Work moodboard — mobile: griglia singola colonna */
-  .work-moodboard-section .section-header { padding: 60px 20px 24px; }
+  .work-moodboard-section .section-header { padding: 100px 20px 24px; } /* sotto il menu fisso */
   .work-moodboard {
     grid-template-columns: 1fr;
     grid-auto-rows: 240px;
