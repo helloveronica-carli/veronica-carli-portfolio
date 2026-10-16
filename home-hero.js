@@ -92,12 +92,6 @@
   });
   const FEATHER = 0.035;
 
-  // The edge wobbles the same way for the hole and for the particles that sit on it.
-  const edge = (a, t) =>
-    0.014 * Math.sin(3 * a + 0.6 * t) +
-    0.009 * Math.sin(5 * a - 0.9 * t + 1.3) +
-    0.006 * Math.sin(9 * a + 1.4 * t + 0.4);
-
   /* ---------------- the rim is a soft membrane: it swells towards the mouse ---------------- */
   const NB = 96;                        // points around the rim
   const bulge = new Float32Array(NB);   // outward swelling, in px
@@ -132,8 +126,8 @@
     const i = f | 0, k = f - i;
     return bulge[i % NB] * (1 - k) + bulge[(i + 1) % NB] * k;
   }
-  // radius of the rim at angle a: wobbling edge plus the swelling under the mouse
-  const radiusAt = (a, r, et) => r * (1 + edge(a, et)) + bulgeAt(a) * deformK;
+  // radius of the rim at angle a: a perfect circle, swollen only where the mouse passes
+  const radiusAt = (a, r) => r + bulgeAt(a) * deformK;
 
   /* ---------------- geometry ---------------- */
   let vw = 0, vh = 0, cx0 = 0, cy0 = 0, R0 = 0, Rmax = 0, far = 0, dpr = 1;
@@ -410,22 +404,18 @@
   }
 
   /* ---------------- pointer ---------------- */
-  let mx = -9999, my = -9999, pointerIn = false, hoverTarget = 0, nx = 0, ny = 0;
+  let mx = -9999, my = -9999, pointerIn = false, hoverTarget = 0;
   if (fine && !reduce) {
     addEventListener('pointermove', (e) => {
       const sr = stage.getBoundingClientRect();
       mx = e.clientX - sr.left;
       my = e.clientY - sr.top;
       pointerIn = true;
-      const dx = mx - cx0, dy = my - cy0, d = Math.hypot(dx, dy);
-      const pull = Math.max(0, 1 - d / (R0 * 3));
-      nx = (dx / (d || 1)) * 16 * pull;
-      ny = (dy / (d || 1)) * 16 * pull;
-      hoverTarget = d < R0 * 1.08 ? 1 : 0;
+      hoverTarget = Math.hypot(mx - cx0, my - cy0) < R0 * 1.08 ? 1 : 0;
     }, { passive: true });
     addEventListener('pointerout', (e) => {
       if (e.relatedTarget) return;
-      pointerIn = false; hoverTarget = 0; nx = ny = 0;
+      pointerIn = false; hoverTarget = 0;
     });
   }
 
@@ -439,7 +429,7 @@
   enterBtn.addEventListener('click', enter);
 
   /* ---------------- drawing ---------------- */
-  function drawVeil(cx, cy, r, et) {
+  function drawVeil(cx, cy, r) {
     vctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     vctx.globalCompositeOperation = 'source-over';
     vctx.clearRect(0, 0, vw, vh);
@@ -458,7 +448,7 @@
       vctx.beginPath();
       for (let k = 0; k <= STEPS; k++) {
         const a = (k / STEPS) * TAU;
-        const rr = radiusAt(a, r, et) + out * f;
+        const rr = radiusAt(a, r) + out * f;
         const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
         if (k) vctx.lineTo(x, y); else vctx.moveTo(x, y);
       }
@@ -470,7 +460,7 @@
   }
 
   // born: seconds since the hole was born (DONE once the intro is over)
-  function stepRim(dt, t, et, cx, cy, r, grow, born) {
+  function stepRim(dt, t, cx, cy, r, grow, born) {
     const lively = reduce ? 0 : 1;
     const R = 120, R2 = R * R;
     const near = pointerIn && fine && !reduce;
@@ -483,7 +473,7 @@
         if (ik <= 0) continue;
         const a = q.a + t * q.drift * lively;
         const ca = Math.cos(a), sa = Math.sin(a);
-        const rr = radiusAt(a, r, et) + q.off * spread * (1 + (1 - ik) * 6) + Math.sin(t * q.sp + q.ph) * 2.2 * lively;
+        const rr = radiusAt(a, r) + q.off * spread * (1 + (1 - ik) * 6) + Math.sin(t * q.sp + q.ph) * 2.2 * lively;
         let x = cx + ca * rr, y = cy + sa * rr;
         if (near) {
           const ddx = x + q.dx - mx, ddy = y + q.dy - my;
@@ -516,7 +506,7 @@
   }
 
   let emitAcc = 0;
-  function evaporate(dt, et, cx, cy, r, hover, speed) {
+  function evaporate(dt, cx, cy, r, hover, speed) {
     const rate = 80 + hover * 380 + Math.min(1600, speed * 1400);
     emitAcc += rate * dt;
     let n = emitAcc | 0;
@@ -524,7 +514,7 @@
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2;
       const ca = Math.cos(a), sa = Math.sin(a);
-      const rr = radiusAt(a, r, et);
+      const rr = radiusAt(a, r);
       const x = cx + ca * rr, y = cy + sa * rr;
       if (x < -10 || y < -10 || x > vw + 10 || y > vh + 10) continue;
       const u = Math.random();
@@ -708,7 +698,7 @@
   /* ---------------- loop ---------------- */
   const t0 = performance.now();
   let last = t0, idle = false;
-  let p = 0, pv = 0, hover = 0, hv = 0, ox = 0, oy = 0;
+  let p = 0, pv = 0, hover = 0, hv = 0;
 
   /* ---------------- intro: the two balls and the impact ---------------- */
   let ballPrev = null;
@@ -780,14 +770,11 @@
       [p, pv] = spring(p, pv, target, 0.5, dt);
       [hover, hv] = spring(hover, hv, hoverTarget, 0.35, dt);
     }
-    ox += (nx - ox) * Math.min(1, dt * 8);
-    oy += (ny - oy) * Math.min(1, dt * 8);
 
     // po: how open the circle is (fully open at OPEN of the runway, then a pause inside)
     const po = clamp01(clamp01(p) / OPEN);
     const grow = po * po * (3 - 2 * po);
     const mag = 1 - po;
-    const et = reduce ? 0 : t;
     const breathe = reduce ? 0 : Math.sin(t * 0.9) * 0.012;
 
     // intro: no hole before the impact, then it is born from the merged balls with a small pop
@@ -796,14 +783,13 @@
     const birth = born === DONE ? 1 : born < 0 ? 0 : easeOutBack(clamp01(born / INTRO.birth));
     if (born >= 0 && !burstDone) { burst(); burstDone = true; }
     const rb = R0 * 0.38;
-    const rRest = R0 * (1 + breathe * mag) + hover * 12 * mag;
+    const rRest = R0 * (1 + breathe * mag); // the whole circle never moves or grows with the mouse
     const r = (born < 0 ? 0 : rb + (rRest - rb) * birth) + (Rmax - R0) * grow;
-    const settle = Math.min(1, birth);
-    const cx = cx0 + ox * mag * settle, cy = cy0 + oy * mag * settle;
+    const cx = cx0, cy = cy0;
 
     deformK = mag;
     if (!reduce) updateBulge(dt, cx, cy, r, mag);
-    drawVeil(cx, cy, r, et);
+    drawVeil(cx, cy, r);
     // seen from outside the cards are far away and small; entering, they come up to full size
     const depth = DEPTH * Math.pow(1 / DEPTH, grow);
     const lift = (cy0 - rowY) * (1 - grow); // far away, the row is centred in the circle
@@ -819,8 +805,8 @@
     dctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     dctx.clearRect(0, 0, vw, vh);
     drawBalls(it, dt);
-    if (born >= 0) stepRim(dt, t, et, cx, cy, r, grow, born);
-    if (!reduce && born >= 0.15) evaporate(dt, et, cx, cy, r, hover, Math.abs(pv));
+    if (born >= 0) stepRim(dt, t, cx, cy, r, grow, born);
+    if (!reduce && born >= 0.15) evaporate(dt, cx, cy, r, hover, Math.abs(pv));
     updateTitle(dt, po, hover, { left: tb.left - sr.left, top: tb.top - sr.top, width: tb.width }, it);
     if (!reduce && grow > 0.92) crumbleCards(dt, sr);
     stepDust(dt, t);
