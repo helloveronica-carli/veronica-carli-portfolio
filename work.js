@@ -15,24 +15,85 @@
   const clamp01 = (x) => Math.min(1, Math.max(0, x));
   const rand = (a, b) => a + Math.random() * (b - a);
 
+  // cubic-bezier solver; the arrows move the row with a strong ease-in-out (on-screen movement)
+  function bezier(x1, y1, x2, y2) {
+    const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+    const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+    const sx = (t) => ((ax * t + bx) * t + cx) * t;
+    const sy = (t) => ((ay * t + by) * t + cy) * t;
+    const dx = (t) => (3 * ax * t + 2 * bx) * t + cx;
+    return (x) => {
+      let t = x;
+      for (let i = 0; i < 8; i++) {
+        const e = sx(t) - x, d = dx(t);
+        if (Math.abs(e) < 1e-5 || !d) break;
+        t -= e / d;
+      }
+      return sy(clamp01(t));
+    };
+  }
+  const easeInOut = bezier(0.77, 0, 0.175, 1);
+  const STEP_MS = 380;   // one card per click
+  const RESUME_MS = 2600; // after the last click the auto-flow waits this long, then comes back
+
   /* ---------------- rows ---------------- */
   const rows = rowEls.map((row) => {
     const track = row.querySelector('.wk-track');
     return {
       row, track, originals: [...track.children], cards: [],
-      loop: false, setW: 1, maxX: 0,
+      loop: false, setW: 1, maxX: 0, unit: 1,
       x: 0, v: 0, autoK: 1, idleUntil: 0, hover: false,
       drag: null, justDragged: false, visible: false,
+      tween: null, nav: null,
     };
   });
+
+  /* ---------------- arrows: move one card at a time, by hand ---------------- */
+  const isEn = () => document.documentElement.getAttribute('lang') === 'en';
+  function makeNav(r) {
+    const nav = document.createElement('div');
+    nav.className = 'wk-nav';
+    const arrow = (dir, glyph, it, en) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'wk-arrow';
+      b.innerHTML = `<span aria-hidden="true">${glyph}</span><span class="wk-sr" data-it="${it}" data-en="${en}">${isEn() ? en : it}</span>`;
+      b.addEventListener('click', () => nudge(r, dir));
+      return b;
+    };
+    nav.append(
+      arrow(-1, '←', 'Progetti precedenti', 'Previous projects'),
+      arrow(1, '→', 'Progetti successivi', 'Next projects'),
+    );
+    r.row.after(nav);
+    return nav;
+  }
+
+  function nudge(r, dir) {
+    const now = performance.now();
+    r.v = 0;
+    r.idleUntil = now + STEP_MS + RESUME_MS;
+    if (reduce) { r.x += dir * r.unit; return; }
+    // rapid clicks add up: start from where the row is now, aim one card past the current target
+    let from = r.x, to = r.x + dir * r.unit;
+    if (r.tween) {
+      const k = easeInOut(clamp01((now - r.tween.t0) / STEP_MS));
+      from = r.tween.from + (r.tween.to - r.tween.from) * k;
+      to = r.tween.to + dir * r.unit;
+    }
+    r.tween = { from, to, t0: now };
+  }
 
   function build(r) {
     r.track.replaceChildren(...r.originals);
     const n = r.originals.length;
     const unit = r.originals[0].offsetWidth + 20; // card + its margin
     const rowW = r.row.clientWidth;
+    r.unit = unit;
     r.loop = n >= LOOP_MIN && n * unit > rowW;
     r.row.classList.toggle('is-loop', r.loop);
+    if (!r.nav) r.nav = makeNav(r);
+    r.nav.hidden = !r.loop; // arrows only where the row flows
     if (r.loop) {
       // enough copies that one set is wider than the row, then the set twice for a seamless loop
       const reps = Math.max(1, Math.ceil((rowW + unit) / (n * unit)));
@@ -64,6 +125,7 @@
       if (e.pointerType === 'mouse') return;
       // a finger on the row holds it still, so the card under it can be tapped
       r.idleUntil = performance.now() + 1200;
+      r.tween = null;
       r.drag = { id: e.pointerId, x: e.clientX, y: e.clientY, lastX: e.clientX, lastT: performance.now(), on: false, moved: 0 };
     });
     r.row.addEventListener('pointermove', (e) => {
@@ -104,7 +166,12 @@
   }
 
   function stepRow(r, dt, now) {
-    if (!r.drag || !r.drag.on) {
+    if (r.tween) {
+      const k = clamp01((now - r.tween.t0) / STEP_MS);
+      r.x = r.tween.from + (r.tween.to - r.tween.from) * easeInOut(k);
+      if (k >= 1) r.tween = null;
+      r.autoK = 0;
+    } else if (!r.drag || !r.drag.on) {
       r.v *= Math.exp(-dt * 3.5); // the fling carries on, then slows down
       if (r.loop) {
         const want = r.hover || now < r.idleUntil ? 0 : 1;
