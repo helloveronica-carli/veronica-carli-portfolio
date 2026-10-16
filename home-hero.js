@@ -98,6 +98,43 @@
     0.009 * Math.sin(5 * a - 0.9 * t + 1.3) +
     0.006 * Math.sin(9 * a + 1.4 * t + 0.4);
 
+  /* ---------------- the rim is a soft membrane: it swells towards the mouse ---------------- */
+  const NB = 96;                        // points around the rim
+  const bulge = new Float32Array(NB);   // outward swelling, in px
+  const bulgeV = new Float32Array(NB);
+  const bulgeT = new Float32Array(NB);
+  let deformK = 1;                      // fades the swelling away as the circle opens
+  function updateBulge(dt, cx, cy, r, mag) {
+    bulgeT.fill(0);
+    if (pointerIn && fine && !reduce && mag > 0.01 && r > 1) {
+      const dx = mx - cx, dy = my - cy, d = Math.hypot(dx, dy);
+      const prox = clamp01(1 - Math.abs(d - r) / 150); // strongest right on the rim, inside or outside
+      if (prox > 0) {
+        const ac = Math.atan2(dy, dx);
+        const amp = Math.min(48, r * 0.22) * prox * prox * (3 - 2 * prox) * mag;
+        const sig = 0.32; // width of the bulge, in radians
+        for (let i = 0; i < NB; i++) {
+          let da = Math.abs((i / NB) * TAU - ac) % TAU;
+          if (da > Math.PI) da = TAU - da;
+          bulgeT[i] = amp * Math.exp(-(da * da) / (2 * sig * sig));
+        }
+      }
+    }
+    // jelly: every point springs to its target and pulls on its neighbours, so it relaxes with a soft wobble
+    for (let i = 0; i < NB; i++) {
+      const l = bulge[(i + NB - 1) % NB], rt = bulge[(i + 1) % NB];
+      bulgeV[i] += ((bulgeT[i] - bulge[i]) * 70 + (l + rt - 2 * bulge[i]) * 40 - bulgeV[i] * 7) * dt;
+    }
+    for (let i = 0; i < NB; i++) bulge[i] += bulgeV[i] * dt;
+  }
+  function bulgeAt(a) {
+    const f = ((((a % TAU) + TAU) % TAU) / TAU) * NB;
+    const i = f | 0, k = f - i;
+    return bulge[i % NB] * (1 - k) + bulge[(i + 1) % NB] * k;
+  }
+  // radius of the rim at angle a: wobbling edge plus the swelling under the mouse
+  const radiusAt = (a, r, et) => r * (1 + edge(a, et)) + bulgeAt(a) * deformK;
+
   /* ---------------- geometry ---------------- */
   let vw = 0, vh = 0, cx0 = 0, cy0 = 0, R0 = 0, Rmax = 0, far = 0, dpr = 1;
 
@@ -410,22 +447,25 @@
     vctx.fillStyle = '#EFEEE9';
     vctx.fillRect(0, 0, vw, vh);
     if (r < 0.5) return; // before the impact there is no hole yet
+    // The hole follows the deformed rim; its soft edge is built from a few stacked cuts
     vctx.globalCompositeOperation = 'destination-out';
-    const g = vctx.createRadialGradient(cx, cy, r * (1 - FEATHER), cx, cy, r * 1.015);
-    g.addColorStop(0, 'rgba(0,0,0,1)');
-    g.addColorStop(0.6, 'rgba(0,0,0,0.7)');
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    vctx.fillStyle = g;
-    vctx.beginPath();
+    vctx.fillStyle = '#000';
+    const f = r * FEATHER;
+    const cuts = [[0.4, 0.3], [0, 0.3], [-0.4, 0.3], [-0.8, 0.3], [-1, 1]]; // [outset in feathers, strength]
     const STEPS = 160;
-    for (let k = 0; k <= STEPS; k++) {
-      const a = (k / STEPS) * Math.PI * 2;
-      const rr = r * (1 + edge(a, et)) * 1.03;
-      const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
-      if (k) vctx.lineTo(x, y); else vctx.moveTo(x, y);
+    for (const [out, strength] of cuts) {
+      vctx.globalAlpha = strength;
+      vctx.beginPath();
+      for (let k = 0; k <= STEPS; k++) {
+        const a = (k / STEPS) * TAU;
+        const rr = radiusAt(a, r, et) + out * f;
+        const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
+        if (k) vctx.lineTo(x, y); else vctx.moveTo(x, y);
+      }
+      vctx.closePath();
+      vctx.fill();
     }
-    vctx.closePath();
-    vctx.fill();
+    vctx.globalAlpha = 1;
     vctx.globalCompositeOperation = 'source-over';
   }
 
@@ -443,13 +483,13 @@
         if (ik <= 0) continue;
         const a = q.a + t * q.drift * lively;
         const ca = Math.cos(a), sa = Math.sin(a);
-        const rr = r * (1 + edge(a, et)) + q.off * spread * (1 + (1 - ik) * 6) + Math.sin(t * q.sp + q.ph) * 2.2 * lively;
+        const rr = radiusAt(a, r, et) + q.off * spread * (1 + (1 - ik) * 6) + Math.sin(t * q.sp + q.ph) * 2.2 * lively;
         let x = cx + ca * rr, y = cy + sa * rr;
         if (near) {
           const ddx = x + q.dx - mx, ddy = y + q.dy - my;
           const d2 = ddx * ddx + ddy * ddy;
           if (d2 < R2) {
-            const d = Math.sqrt(d2) || 1, f = 1 - d / R, F = f * f * 2600;
+            const d = Math.sqrt(d2) || 1, f = 1 - d / R, F = f * f * 1500;
             q.vx += (ddx / d) * F * dt;
             q.vy += ((ddy / d) * F - f * 500) * dt;
             if (Math.random() < f * 0.05) {
@@ -484,7 +524,7 @@
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2;
       const ca = Math.cos(a), sa = Math.sin(a);
-      const rr = r * (1 + edge(a, et));
+      const rr = radiusAt(a, r, et);
       const x = cx + ca * rr, y = cy + sa * rr;
       if (x < -10 || y < -10 || x > vw + 10 || y > vh + 10) continue;
       const u = Math.random();
@@ -761,6 +801,8 @@
     const settle = Math.min(1, birth);
     const cx = cx0 + ox * mag * settle, cy = cy0 + oy * mag * settle;
 
+    deformK = mag;
+    if (!reduce) updateBulge(dt, cx, cy, r, mag);
     drawVeil(cx, cy, r, et);
     // seen from outside the cards are far away and small; entering, they come up to full size
     const depth = DEPTH * Math.pow(1 / DEPTH, grow);
