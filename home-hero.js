@@ -746,6 +746,126 @@
     }
   }
 
+  /* ---------------- a little runner dives into the hole every few seconds ---------------- */
+  const RUN_EVERY = 5;    // seconds from one dive to the next
+  const RUN_SPEED = 260;  // px per second
+  const JUMP = 0.55;      // seconds in the air
+  let runner = null, nextRunAt = null, runSide = 1; // the first one comes from the left
+
+  // A cute stick figure: round head, ink lines, an orange scarf. Feet at (0, 0), facing +x.
+  function drawRunner(x, y, s, ph, rot, alpha, sc, dir, air) {
+    dctx.save();
+    dctx.globalAlpha = alpha;
+    dctx.translate(x, y);
+    dctx.scale(sc * dir, sc);
+    dctx.rotate(rot);
+    dctx.lineCap = 'round';
+    dctx.lineJoin = 'round';
+    const lw = Math.max(2, s * 0.2);
+    const bob = air ? 0 : -Math.abs(Math.sin(ph)) * s * 0.18;
+    const hipX = 0, hipY = -s * 1.5 + bob;
+    const neckX = s * 0.32, neckY = hipY - s * 1.25;
+    // angles from straight down, positive = forward
+    const limb = (ox, oy, a1, l1, a2, l2) => {
+      const kx = ox + Math.sin(a1) * l1, ky = oy + Math.cos(a1) * l1;
+      dctx.beginPath();
+      dctx.moveTo(ox, oy);
+      dctx.lineTo(kx, ky);
+      dctx.lineTo(kx + Math.sin(a2) * l2, ky + Math.cos(a2) * l2);
+      dctx.stroke();
+    };
+    // scarf first, so it flutters behind the body
+    dctx.strokeStyle = 'rgb(255,90,31)';
+    dctx.lineWidth = lw * 1.15;
+    dctx.beginPath();
+    dctx.moveTo(neckX, neckY + s * 0.1);
+    dctx.quadraticCurveTo(-s * 0.6, neckY + Math.sin(ph * 2) * s * 0.3, -s * 1.5, neckY + s * 0.2 + Math.sin(ph * 2 + 1) * s * 0.35);
+    dctx.stroke();
+    dctx.strokeStyle = '#0A0A0A';
+    dctx.lineWidth = lw;
+    for (let i = 0; i < 2; i++) {
+      const sw = Math.sin(ph + i * Math.PI);
+      if (air) {
+        // diving: legs trail behind, arms reach forward
+        limb(hipX, hipY, -0.5 - i * 0.25, s * 0.8, -0.9 - i * 0.25, s * 0.8);
+        limb(neckX, neckY + s * 0.15, 2.3 + i * 0.2, s * 0.7, 2.5 + i * 0.2, s * 0.6);
+      } else {
+        const thigh = sw * 0.75;
+        limb(hipX, hipY, thigh, s * 0.8, thigh - 0.2 - Math.max(0, -sw) * 1.1, s * 0.8);
+        const upper = -sw * 0.9;
+        limb(neckX, neckY + s * 0.15, upper, s * 0.65, upper + 1.3, s * 0.55);
+      }
+    }
+    dctx.beginPath();
+    dctx.moveTo(hipX, hipY);
+    dctx.lineTo(neckX, neckY);
+    dctx.stroke();
+    dctx.fillStyle = '#0A0A0A';
+    dctx.beginPath();
+    dctx.arc(neckX + s * 0.22, neckY - s * 0.5, s * 0.5, 0, TAU);
+    dctx.fill();
+    dctx.restore();
+  }
+
+  function startRun(cx, cy, r) {
+    runSide = -runSide; // one time from the left, the next from the right
+    const fromLeft = runSide < 0;
+    const ae = (fromLeft ? Math.PI : 0) + rand(-0.35, 0.35);
+    const ex = cx + Math.cos(ae) * r, ey = cy + Math.sin(ae) * r;
+    const dir = fromLeft ? 1 : -1;
+    const s = Math.max(11, Math.min(18, R0 * 0.11));
+    const x0 = fromLeft ? -s * 3 : vw + s * 3;
+    const xT = ex - dir * 70; // take-off
+    runner = { dir, s, ae, ex, ey, x0, xT, t0: 0, runT: Math.max(0.2, Math.abs(xT - x0) / RUN_SPEED), splashed: false };
+  }
+
+  function splash(ex, ey, ae) {
+    // the membrane gives way where he dives in, then wobbles back
+    for (let i = 0; i < NB; i++) {
+      let da = Math.abs((i / NB) * TAU - ae) % TAU;
+      if (da > Math.PI) da = TAU - da;
+      bulgeV[i] -= 170 * Math.exp(-(da * da) / (2 * 0.22 * 0.22));
+    }
+    const ca = Math.cos(ae), sa = Math.sin(ae);
+    for (let i = 0; i < 40; i++) {
+      const sp = rand(20, 120), spread = rand(-1.1, 1.1);
+      const vx = (ca * Math.cos(spread) - sa * Math.sin(spread)) * sp;
+      const vy = (sa * Math.cos(spread) + ca * Math.sin(spread)) * sp;
+      emit(Math.random() < 0.7 ? INK : ORANGE, ex, ey, vx, vy - rand(0, 30), rand(0.5, 1.3), rand(0.9, 2.2), 0.9, rand(8, 25));
+    }
+  }
+
+  function stepRunner(dt, t, it, po, cx, cy, r) {
+    if (reduce || it !== DONE) return;
+    if (po > 0.03) { runner = null; nextRunAt = t + 1.5; return; } // scrolling into the circle: no runner
+    if (nextRunAt === null) nextRunAt = t + 1.2; // first one shortly after the intro
+    if (!runner && t >= nextRunAt) {
+      startRun(cx, cy, r);
+      runner.t0 = t;
+      nextRunAt = t + RUN_EVERY;
+    }
+    if (!runner) return;
+    const R = runner, e = t - R.t0;
+    if (e < R.runT) {
+      // running in
+      const x = R.x0 + (R.xT - R.x0) * (e / R.runT);
+      drawRunner(x, R.ey + 4, R.s, Math.abs(x - R.x0) / (R.s * 1.1), 0.12, 1, 1, R.dir, false);
+      return;
+    }
+    const u = (e - R.runT) / JUMP;
+    if (u < 1.45) {
+      // the jump: an arc into the hole, diving head first and shrinking as he falls away
+      const k = Math.min(1, u);
+      const x = R.xT + R.dir * 96 * k + (u > 1 ? R.dir * 20 * (u - 1) : 0);
+      const y = R.ey + 4 - 55 * 4 * k * (1 - k) + (u > 1 ? 60 * (u - 1) : 14 * k);
+      if (!R.splashed && (x - R.ex) * R.dir > 0) { R.splashed = true; splash(R.ex, R.ey, R.ae); }
+      const alpha = u > 1 ? Math.max(0, 1 - (u - 1) / 0.45) : 1;
+      drawRunner(x, y, R.s, 0, 0.3 + 1.1 * k, alpha, 1 - 0.5 * Math.min(1, u), R.dir, true);
+      return;
+    }
+    runner = null;
+  }
+
   function render(now) {
     const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
     last = now;
@@ -810,6 +930,7 @@
     updateTitle(dt, po, hover, { left: tb.left - sr.left, top: tb.top - sr.top, width: tb.width }, it);
     if (!reduce && grow > 0.92) crumbleCards(dt, sr);
     stepDust(dt, t);
+    stepRunner(dt, t, it, po, cx, cy, r);
 
     if (born > 0.3 && po < 0.6) {
       const hit = Math.max(r, 60);
