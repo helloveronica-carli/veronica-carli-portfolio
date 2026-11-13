@@ -340,9 +340,8 @@
     letters = [...titleText.querySelectorAll('.vh-ch')].map((el, i) => ({
       el, i, s: s0, shown: -1, acc: 0, pts: [], color: INK, x: 0, y: 0,
     }));
-    boxes = [...titleText.querySelectorAll('.highlight')].map((el) => ({
-      el, letters: [], pts: [], s: s0, acc: 0, shown: -1,
-    }));
+    // the highlighted word is now plain orange text: no orange block to dissolve
+    boxes = [];
     for (const L of letters) {
       const b = boxes.find((bx) => bx.el.contains(L.el));
       if (b) b.letters.push(L);
@@ -381,7 +380,7 @@
         }
       }
       L.pts = pts;
-      L.color = outline ? BLUE : INK;
+      L.color = outline ? BLUE : L.el.closest('.highlight') ? ORANGE : INK;
       L.x = r.left - base.left + r.width / 2;
       L.y = r.top - base.top + r.height / 2;
     }
