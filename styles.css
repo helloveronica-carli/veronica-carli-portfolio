@@ -789,6 +789,26 @@ body.nav-open { overflow: hidden; }
   transition: all 0.3s;
 }
 
+.contact-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 100%;
+}
+
+.contact-photo {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  .contact-line { gap: 12px; }
+  .contact-photo { width: 44px; height: 44px; }
+}
+
 .footer-cta a.email:hover {
   color: var(--accent);
   border-color: var(--accent);
