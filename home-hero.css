@@ -144,8 +144,7 @@
   color: var(--fg);
 }
 .vh-title .highlight {
-  background: var(--accent);
-  padding: 0 0.12em 0.04em;
+  color: var(--accent);
   display: inline-block;
   line-height: 0.95;
 }

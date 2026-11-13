@@ -85,17 +85,10 @@ nav {
   transition: color 0.3s;
 }
 
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -6px; left: 0;
-  width: 0; height: 2px;
-  background: var(--accent);
-  transition: width 0.3s;
-}
+.nav-links a::after { content: none; }
 
-.nav-links a:hover::after,
-.nav-links a.current::after { width: 100%; }
+.nav-links a:hover,
+.nav-links a.current { color: var(--accent); }
 
 .nav-right {
   display: flex;
@@ -369,11 +362,9 @@ body.nav-open { overflow: hidden; }
 }
 
 .hero-title .highlight {
-  background: var(--accent);
-  padding: 0 0.15em 0.05em;
+  color: var(--accent);
   display: inline-block;
   line-height: 0.9;
-  margin: 0 -0.05em;
 }
 
 .hero-title .outline {
@@ -405,9 +396,7 @@ body.nav-open { overflow: hidden; }
 }
 
 .hero-positioning .pill {
-  background: var(--accent);
-  padding: 0 8px;
-  border-radius: 4px;
+  color: var(--accent);
   display: inline-block;
 }
 
@@ -515,8 +504,7 @@ body.nav-open { overflow: hidden; }
 }
 
 .section-title .accent {
-  background: var(--accent);
-  padding: 0 0.12em 0.04em;
+  color: var(--accent);
   display: inline-block;
 }
 
@@ -709,9 +697,7 @@ body.nav-open { overflow: hidden; }
 }
 
 .about-text .accent {
-  background: var(--accent);
-  padding: 0 8px 4px;
-  border-radius: 4px;
+  color: var(--accent);
 }
 
 .about-link {
@@ -786,17 +772,16 @@ body.nav-open { overflow: hidden; }
 }
 
 .footer-cta h2 .accent {
-  background: var(--accent);
-  color: var(--fg);
-  padding: 0 0.12em 0.04em;
+  color: var(--accent);
   display: inline-block;
 }
 
 .footer-cta a.email {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 400;
-  font-size: 28px;
+  font-size: clamp(17px, 5vw, 28px);
   letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
   color: var(--bg);
   text-decoration: none;
   border-bottom: 1px solid rgba(239, 238, 233, 0.3);
@@ -877,10 +862,8 @@ footer a:hover { color: var(--accent); }
 }
 
 .project-title .accent {
-  background: var(--accent);
-  padding: 0 0.12em 0.04em;
+  color: var(--accent);
   display: inline-block;
-  color: var(--fg);
 }
 
 .project-meta-block {
@@ -980,8 +963,7 @@ footer a:hover { color: var(--accent); }
 }
 
 .case-section h2 .accent {
-  background: var(--accent);
-  padding: 0 0.12em 0.04em;
+  color: var(--accent);
   display: inline-block;
 }
 
@@ -2068,6 +2050,8 @@ footer a:hover { color: var(--accent); }
 
 .nav-on-dark .logo,
 .nav-on-dark .nav-links a { color: var(--bg); }
+.nav-on-dark .nav-links a:hover,
+.nav-on-dark .nav-links a.current { color: var(--accent); }
 
 .nav-on-dark .lang-switch {
   border-color: var(--bg);
